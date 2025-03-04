@@ -1,10 +1,22 @@
 <script setup>
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
-import millsLogo from '@/assets/mills.webp';
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import millsLogo from '@/assets/mills.webp'
 
 // State untuk jumlah item di cart
-const cartCount = ref(0);
+const cartCount = ref(0)
+
+const isLoggedIn = ref(false)
+const isLoginModalOpen = ref(false)
+const isRegisterModalOpen = ref(false)
+const closeLoginModal = () => {
+  isLoginModalOpen.value = false
+}
+
+const closeRegisterModal = () => {
+  isRegisterModalOpen.value = false
+  isLoginModalOpen.value = false
+}
 </script>
 
 <template>
@@ -29,10 +41,43 @@ const cartCount = ref(0);
     </RouterLink>
 
     <!-- Account Icon -->
-    <RouterLink to="/account" class="navbar__account">
-        <i class="ri-account-circle-fill"></i>
+    <RouterLink v-if="isLoggedIn" to="/account" class="navbar__account">
+      <i class="ri-account-circle-fill"></i>
     </RouterLink>
+    <button v-else @click="isLoginModalOpen = true" class="navbar__login">
+      Login
+    </button>
   </nav>
+
+  <!-- login form -->
+  <div v-if="isLoginModalOpen" class="modal-overlay" @click.self="closeLoginModal">
+    <div class="modal">
+      <h2>Login</h2>
+      <form @submit.prevent="closeLoginModal">
+        <input type="text" placeholder="Username" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <button class="close-btn" @click="closeLoginModal">X</button>
+      <button class="register" @click="isRegisterModalOpen = true">Register</button>
+    </div>
+  </div>
+
+  <!-- //register form -->
+  <div v-if="isRegisterModalOpen" class="modal-overlay" @click.self="closeRegisterModal">
+    <div class="modal">
+      <h2>Login</h2>
+      <form @submit.prevent="closeLoginModal">
+        <input type="text" placeholder="Username" required />
+        <input type="text" placeholder="Email" required />
+        <input type="password" placeholder="Password" required />
+        <input type="text" placeholder="Address" required />
+        <button type="submit">Register</button>
+      </form>
+      <button class="close-btn" @click="closeRegisterModal">X</button>
+    </div>
+  </div>
+
 </template>
 
 <style scoped>
@@ -130,5 +175,70 @@ const cartCount = ref(0);
   color: white;
 }
 
+.navbar__login {
+  margin-right: 20px;
+}
+
+.login-btn {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  position: relative;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modal button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
 </style>
