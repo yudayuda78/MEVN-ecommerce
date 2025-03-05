@@ -19,8 +19,10 @@ app.use(cors({
     allowedHeaders: 'Content-Type, Authorization'
 }));
 
+
+
 // Koneksi ke MongoDB
-mongoose.connect('mongodb://localhost:27017/menvecommerce')
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ Koneksi MongoDB berhasil!"))
     .catch(err => console.error("❌ Koneksi MongoDB gagal:", err))
 

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+import axios from 'axios'
 import millsLogo from '@/assets/mills.webp'
 
 // State untuk jumlah item di cart
@@ -9,6 +11,7 @@ const cartCount = ref(0)
 const isLoggedIn = ref(false)
 const isLoginModalOpen = ref(false)
 const isRegisterModalOpen = ref(false)
+
 const closeLoginModal = () => {
   isLoginModalOpen.value = false
 }
@@ -17,6 +20,24 @@ const closeRegisterModal = () => {
   isRegisterModalOpen.value = false
   isLoginModalOpen.value = false
 }
+
+const authStore = useAuthStore()
+const registerData = ref({
+  name: '',
+  username: '',
+  email: '',
+  password: '',
+  address: ''
+})
+
+const handleRegister = async () => {
+  const success = await authStore.registerUser(registerData.value)
+  if (success) {
+    closeRegisterModal()
+    isLoginModalOpen.value = true 
+  }
+}
+
 </script>
 
 <template>
@@ -67,11 +88,12 @@ const closeRegisterModal = () => {
   <div v-if="isRegisterModalOpen" class="modal-overlay" @click.self="closeRegisterModal">
     <div class="modal">
       <h2>Login</h2>
-      <form @submit.prevent="closeLoginModal">
-        <input type="text" placeholder="Username" required />
-        <input type="text" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
-        <input type="text" placeholder="Address" required />
+      <form @submit.prevent="handleRegister">
+        <input type="text" placeholder="Name" v-model="registerData.name" required />
+        <input type="text" placeholder="Username" v-model="registerData.username" required />
+        <input type="text" placeholder="Email" v-model="registerData.email" required />
+        <input type="password" placeholder="Password"  v-model="registerData.password" required />
+        <input type="text" placeholder="Address" v-model="registerData.address" required />
         <button type="submit">Register</button>
       </form>
       <button class="close-btn" @click="closeRegisterModal">X</button>
