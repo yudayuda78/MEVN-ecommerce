@@ -5,6 +5,12 @@ import axios from 'axios'
 export const useAuthStore = defineStore('auth', () => {
     const isLoggedIn = ref(false)
     const user = ref(null)
+    const token = ref(localStorage.getItem('token') || null)
+
+    if (token.value) {
+        isLoggedIn.value = true
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+    }
 
     const registerUser = async (registerData) => {
         try {
@@ -21,5 +27,35 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    return { isLoggedIn, user, registerUser }
+    const loginUser = async (loginData) =>{
+        try{
+            const response = await axios.post('http://localhost:9887/api/user/login', loginData)
+            if (!response.data.token) throw new Error("Token tidak ditemukan")
+            
+            token.value = response.data.token
+            user.value = response.data.user
+            isLoggedIn.value = true
+
+            localStorage.setItem('token', token.value)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+
+            return true
+        }catch(error){
+            alert(error.response?.data?.message || "Login gagal!")
+            console.error("❌ Login gagal:", error.response ? error.response.data : error.message)
+            return false
+        }
+    }
+
+    const logoutUser = () => {
+        token.value = null
+        user.value = null
+        isLoggedIn.value = false
+
+        // Hapus token dari localStorage
+        localStorage.removeItem('token')
+        delete axios.defaults.headers.common['Authorization']
+    }
+
+    return { isLoggedIn, user, registerUser, loginUser, logoutUser }
 })

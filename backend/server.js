@@ -12,7 +12,7 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-
+// Cors
 app.use(cors({ 
     origin: 'http://localhost:5173',
     methods: 'GET,POST,PUT,DELETE,OPTIONS',

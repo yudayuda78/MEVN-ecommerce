@@ -11,6 +11,7 @@ const cartCount = ref(0)
 const isLoggedIn = ref(false)
 const isLoginModalOpen = ref(false)
 const isRegisterModalOpen = ref(false)
+const isDropdownOpen = ref(false)
 
 const closeLoginModal = () => {
   isLoginModalOpen.value = false
@@ -19,6 +20,15 @@ const closeLoginModal = () => {
 const closeRegisterModal = () => {
   isRegisterModalOpen.value = false
   isLoginModalOpen.value = false
+}
+
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value
+}
+
+const logout = () => {
+  authStore.logoutUser()
+  isDropdownOpen.value = false
 }
 
 const authStore = useAuthStore()
@@ -30,11 +40,23 @@ const registerData = ref({
   address: ''
 })
 
+const loginData = ref({
+  email: '',
+  password: ''
+})
+
 const handleRegister = async () => {
   const success = await authStore.registerUser(registerData.value)
   if (success) {
     closeRegisterModal()
     isLoginModalOpen.value = true 
+  }
+}
+
+const handleLogin = async () => {
+  const success = await authStore.loginUser(loginData.value)
+  if (success) {
+    closeLoginModal()
   }
 }
 
@@ -62,9 +84,15 @@ const handleRegister = async () => {
     </RouterLink>
 
     <!-- Account Icon -->
-    <RouterLink v-if="isLoggedIn" to="/account" class="navbar__account">
-      <i class="ri-account-circle-fill"></i>
-    </RouterLink>
+    <div class="navbar__account" v-if="authStore.isLoggedIn">
+      <button @click="toggleDropdown" class="account-btn">
+        <i class="ri-account-circle-fill"></i>
+      </button>
+      <div v-if="isDropdownOpen" class="dropdown-menu">
+        <RouterLink to="/account" class="dropdown-item">Profile</RouterLink>
+        <button @click="logout" class="dropdown-item logout-btn">Logout</button>
+      </div>
+    </div>
     <button v-else @click="isLoginModalOpen = true" class="navbar__login">
       Login
     </button>
@@ -74,9 +102,9 @@ const handleRegister = async () => {
   <div v-if="isLoginModalOpen" class="modal-overlay" @click.self="closeLoginModal">
     <div class="modal">
       <h2>Login</h2>
-      <form @submit.prevent="closeLoginModal">
-        <input type="text" placeholder="Username" required />
-        <input type="password" placeholder="Password" required />
+      <form @submit.prevent="handleLogin">
+        <input type="text" placeholder="email" v-model="loginData.email" required />
+        <input type="password" placeholder="Password" v-model="loginData.password" required />
         <button type="submit">Login</button>
       </form>
       <button class="close-btn" @click="closeLoginModal">X</button>
@@ -261,6 +289,39 @@ const handleRegister = async () => {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 10;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px;
+  text-align: left;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+  width: 100%;
+  background: none;
+  border: none;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.logout-btn {
+  color: red;
 }
 
 </style>
