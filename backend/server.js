@@ -29,8 +29,10 @@ mongoose.connect(process.env.MONGO_URI)
 // Import routes
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+
 app.use('/api/product', productRoutes)
 app.use('/api/user', userRoutes) 
+
 
 // Tes endpoint utama
 app.get('/', (req, res) => {

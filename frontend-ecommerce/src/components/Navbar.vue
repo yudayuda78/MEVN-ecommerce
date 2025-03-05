@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import axios from 'axios'
 import millsLogo from '@/assets/mills.webp'
 
 // State untuk jumlah item di cart
 const cartCount = ref(0)
-
+const router = useRouter()
 const isLoggedIn = ref(false)
 const isLoginModalOpen = ref(false)
 const isRegisterModalOpen = ref(false)
@@ -26,9 +26,25 @@ const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
 }
 
+const closeDropdown = (event) => {
+  if (!event.target.closest('.navbar__account')) {
+    isDropdownOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', closeDropdown)
+})
+
+// Hapus event listener saat komponen di-unmount
+onUnmounted(() => {
+  document.removeEventListener('click', closeDropdown)
+})
+
 const logout = () => {
   authStore.logoutUser()
   isDropdownOpen.value = false
+  router.push('/')
 }
 
 const authStore = useAuthStore()
