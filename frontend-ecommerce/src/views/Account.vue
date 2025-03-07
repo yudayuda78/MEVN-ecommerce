@@ -1,8 +1,8 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
+import FormAccount from '@/components/form/FormAccount.vue';
 </script>
 
 <template>
-  <h1>Account Page</h1>
-  <p>Ini halaman akun</p>
+  <FormAccount />
 </template>

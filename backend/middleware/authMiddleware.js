@@ -1,14 +1,43 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js'
 
-export const authMiddleware = (req, res, next) => {
-    const token = req.header("Authorization")
-    if(!token) return res.status(401).json({message: "Akses ditolak! Token tidak ditemukan."})
+export const blacklistedTokens = new Set(); // Gunakan Set agar bisa pakai .has()
+
+export const authMiddleware = async (req, res, next) => {
+    const token = req.get("Authorization")?.split(" ")[1]
+    console.log(token)
     
-    try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET)
-        req.user = verified
-        next()
-    } catch (error) {
-        res.status(400).json({ message: "Token tidak valid!" })
+    if(!token){
+        return next(
+            res.status(401).json({
+                message: "Anda tidak boleh akses halaman ini"
+            })
+        )
     }
-}
+
+    if (blacklistedTokens.has(token)) {
+        return res.status(401).json({ message: "Silahkan login dahulu" });
+    }
+
+    let decoded
+
+    try{
+        decoded = await jwt.verify(token, process.env.JWT_SECRET)
+    }catch(error){
+        return next(
+            res.status(401).json({
+                message: "Token salah/tidak ada"
+            })
+        )
+    }
+    console.log(decoded)
+    const currentUser = await User.findById(decoded.id)
+    if(!currentUser){
+        return next(
+            res.status(401).json({message: "user tidak ada"})
+        )
+    }
+
+    req.user = currentUser
+    next()
+};

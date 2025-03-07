@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', () => {
     const isLoggedIn = ref(false)
-    const user = ref(null)
+    const user = ref({})
     const token = ref(localStorage.getItem('token') || null)
 
     if (token.value) {
@@ -57,5 +57,18 @@ export const useAuthStore = defineStore('auth', () => {
         delete axios.defaults.headers.common['Authorization']
     }
 
-    return { isLoggedIn, user, registerUser, loginUser, logoutUser }
+    const getUser = async () =>{
+        try{
+            const response = await axios.get('http://localhost:9887/api/user/getUser')
+            
+            user.value = response.data.user
+            return user.value
+        } catch(error){
+            console.error("❌ Gagal mengambil data user:", error.response ? error.response.data : error.message)
+            return null
+        }
+        
+    }
+
+    return { isLoggedIn, user, token, registerUser, loginUser, logoutUser, getUser }
 })

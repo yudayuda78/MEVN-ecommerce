@@ -2,6 +2,8 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
+// import cookieParser from 'cookie-parser'
+// import morgan from 'morgan'
 
 dotenv.config()
 
@@ -11,6 +13,11 @@ const PORT = process.env.PORT
 // Middleware untuk parsing JSON
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+// app.use(cookieParser())
+// if(process.env.NODE_ENV === "development"){
+//     app.user(morgan(dev))
+// }
+
 
 // Cors
 app.use(cors({ 
@@ -42,3 +49,5 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Server berjalan di: http://localhost:${PORT}`);
 });
+
+

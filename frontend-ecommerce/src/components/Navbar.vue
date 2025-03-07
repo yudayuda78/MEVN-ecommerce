@@ -32,6 +32,12 @@ const closeDropdown = (event) => {
   }
 }
 
+onMounted(async () => {
+        if (authStore.isLoggedIn) {
+            await authStore.getUser();
+        }
+    });
+
 onMounted(() => {
   document.addEventListener('click', closeDropdown)
 })
@@ -105,6 +111,7 @@ const handleLogin = async () => {
         <i class="ri-account-circle-fill"></i>
       </button>
       <div v-if="isDropdownOpen" class="dropdown-menu">
+        <h1>Hallo {{ authStore.user?.name }}</h1>
         <RouterLink to="/account" class="dropdown-item">Profile</RouterLink>
         <button @click="logout" class="dropdown-item logout-btn">Logout</button>
       </div>
@@ -330,6 +337,10 @@ const handleLogin = async () => {
   width: 100%;
   background: none;
   border: none;
+}
+
+.dropdown-menu h1{
+  color: black;
 }
 
 .dropdown-item:hover {

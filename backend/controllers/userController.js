@@ -1,6 +1,10 @@
 import User from '../models/User.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import { json } from 'express'
+import { blacklistedTokens } from '../middleware/authMiddleware.js'
+
+
 
 export const index = async (req, res) => {
     try {
@@ -49,6 +53,7 @@ export const login = async (req, res) => {
 
         //generate JWT
         const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn: "1h"})
+        console.log(token)
 
         res.json({
             message: "Login berhasil!",
@@ -61,7 +66,28 @@ export const login = async (req, res) => {
     }
 }
 
-export const profile = () =>{
+export const getUser = async (req, res) =>{
+    const user = await User.findById(req.user.id).select("-password")
 
+    if(user){
+        return res.status(200).json({
+            user
+        })
+    }
+
+    return res.status(400).json({message: "user tidak ada"})
+   
+}
+
+export const logout = (req, res) => {
+    try {
+        let token = req.get("Authorization")?.split(" ")[1]; // Ambil token setelah 'Bearer'
+        console.log(token)
+        blacklistedTokens.add(token); // Masukkan token ke blacklist
+        console.log("Blacklisted Tokens:", blacklistedTokens)
+        return res.json({ message: "Logout berhasil!" });
+    } catch (error) {
+        return res.status(500).json({ message: "Terjadi kesalahan!", error: error.message });
+    }
 }
 
