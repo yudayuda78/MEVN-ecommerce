@@ -91,3 +91,23 @@ export const logout = (req, res) => {
     }
 }
 
+export const editprofile = async (req, res) =>{
+    try{
+        const { name, address} = req.body
+        const idUser = req.user._id
+        const user = await User.findById(idUser).select("-password")
+        if (!user) {
+            return res.status(404).json({ message: "User tidak ditemukan" })
+        }
+
+        user.name = name || user.name
+        user.address = address || user.address
+
+        await user.save()
+        
+        res.json({ message: "Profil berhasil diperbarui!", user })
+    }catch(error){x
+        return res.status(500).json({message: "error"})
+    }
+}
+
