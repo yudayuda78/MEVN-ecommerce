@@ -7,6 +7,8 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref({})
     const token = ref(localStorage.getItem('token') || null)
 
+   
+
     if (token.value) {
         isLoggedIn.value = true
         axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
@@ -70,5 +72,9 @@ export const useAuthStore = defineStore('auth', () => {
         
     }
 
-    return { isLoggedIn, user, token, registerUser, loginUser, logoutUser, getUser }
+    const updateUser = (paramUpdateUser) =>{
+        user.value = paramUpdateUser
+    }
+
+    return { isLoggedIn, user, token, registerUser, loginUser, logoutUser, getUser, updateUser }
 })
