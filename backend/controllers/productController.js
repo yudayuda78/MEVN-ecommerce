@@ -9,6 +9,17 @@ export const index = async (req, res) => {
     }
 }
 
+export const man = async(req, res)=> {
+    let pd = Product
+    res.json(pd)
+    // try{
+    //     const producstMan = await Product.find({jenis: 'man'})
+    //     res.json(productsMan)
+    // }catch(error){
+    //     res.status(500).json({message:"terjadi kesalahan pada query"})
+    // }
+}
+
 export const woman = async (req, res) => {
     try {
         const productsWoman = await Product.find({jenis: 'woman'})

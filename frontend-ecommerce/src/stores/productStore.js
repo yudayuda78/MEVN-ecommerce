@@ -5,7 +5,7 @@ import axios from 'axios';
 export const useProductStore = defineStore('product', () => {
   const productData = ref([]);
 
-  // Fungsi untuk mengambil data produk dari API
+  
   const fetchProducts = async () => {
     try {
       const response = await axios.get('http://localhost:9887/api/product');
@@ -15,7 +15,9 @@ export const useProductStore = defineStore('product', () => {
     }
   };
 
-  // Kembalikan data dan fungsi agar bisa diakses di komponen
+  
+
+
   return {
     productData,
     fetchProducts,
