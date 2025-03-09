@@ -10,14 +10,25 @@ export const index = async (req, res) => {
 }
 
 export const man = async(req, res)=> {
-    let pd = Product
-    res.json(pd)
-    // try{
-    //     const producstMan = await Product.find({jenis: 'man'})
-    //     res.json(productsMan)
-    // }catch(error){
-    //     res.status(500).json({message:"terjadi kesalahan pada query"})
-    // }
+    try {
+        const { jenis, kategori } = req.query
+        let filter = {}
+
+        
+
+        if (jenis) filter.jenis = jenis; // Tambahkan filter jika ada
+        if (kategori) filter.kategori = kategori;
+       
+
+        let pd = await Product.find(filter);
+        
+
+        res.json(pd);
+    } catch (error) {
+        res.status(500).json({ error: "Terjadi kesalahan saat mengambil data" });
+    }
+    
+    
 }
 
 export const woman = async (req, res) => {
