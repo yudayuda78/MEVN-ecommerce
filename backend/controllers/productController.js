@@ -6,7 +6,7 @@ export const index = async (req, res) => {
         let filter = {}
 
         if (jenis) filter.jenis = jenis
-        if (kategori) filter.kategori = kategori
+        if (kategori) filter.kategori = { $in: kategori.split(",") }
         const products = await Product.find(filter);
         res.json(products)
     } catch (err) {

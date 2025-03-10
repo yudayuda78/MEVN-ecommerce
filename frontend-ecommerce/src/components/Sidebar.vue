@@ -4,9 +4,9 @@
       <ul>
         Category
       </ul>
-      <li v-for="Data in DataList" :key="Data">
-        <input type="checkbox" :id="Data" />
-        <label :for="Data">{{ Data }}</label>
+      <li v-for="category in categories" :key="category">
+        <input type="checkbox" :id="category"  :value="category" v-model="selectedCategories" @change="applyFilter"/>
+        <label :for="category">{{ category }}</label>
       </li>
     </div>
 
@@ -49,37 +49,41 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    DataList: {
-      type: Array,
-      required: true,
-    },
-  },
+<script setup>
+import { ref, computed } from "vue";
+import { useProductStore } from "@/stores/productStore";
 
-  data() {
-    return {
-      minValue: 100,
-      maxValue: 500,
-    };
+defineProps({
+  DataList: {
+    type: Array,
+    required: true,
   },
-  computed: {
-    trackStyle() {
-      let minPercent = ((this.minValue - 100) / 400) * 100;
-      let maxPercent = ((this.maxValue - 100) / 400) * 100;
-      return `background: linear-gradient(to right, #ddd ${minPercent}%, #000 ${minPercent}%, #000 ${maxPercent}%, #ddd ${maxPercent}%);`;
-    },
-  },
-  methods: {
-    updateRange() {
-      if (this.minValue > this.maxValue) {
-        let temp = this.minValue;
-        this.minValue = this.maxValue;
-        this.maxValue = temp;
-      }
-    },
-  },
+});
+
+const productStore = useProductStore()
+const selectedCategories = ref([])
+const categories = ref(['futsal', 'sepakbola', 'running',  'lifestyle' ])
+
+
+
+const minValue = ref(100);
+const maxValue = ref(500);
+
+const trackStyle = computed(() => {
+  let minPercent = ((minValue.value - 100) / 400) * 100;
+  let maxPercent = ((maxValue.value - 100) / 400) * 100;
+  return `background: linear-gradient(to right, #ddd ${minPercent}%, #000 ${minPercent}%, #000 ${maxPercent}%, #ddd ${maxPercent}%);`;
+});
+
+const updateRange = () => {
+  if (minValue.value > maxValue.value) {
+    [minValue.value, maxValue.value] = [maxValue.value, minValue.value];
+  }
+};
+
+const applyFilter = () => {
+  
+  productStore.fetchProducts(selectedCategories.value);
 };
 </script>
 
