@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import Navbar from '../components/Navbar.vue'
 import Sidebar from '../components/Sidebar.vue'
 import { useProductStore } from '@/stores/productStore';
+import Product from '../components/Product.vue';
 
 const productStore = useProductStore()
 
@@ -11,14 +12,17 @@ const DataList = ref(["Sepak Bola", "Futsal", "Running", "Lifestyle"])
 
 onMounted(() => {
   productStore.fetchProducts();
-});
+})
+
+
 </script>
 
 <template>
   <div class="mainContainer">
     <Sidebar :DataList="DataList" />
+    <Product />
   </div>
-  <p>Data Product:</p>
+  <!-- <p>Data Product:</p>
       <ul>
         
         <li v-for="(product, index) in productStore.productData" :key="product._id">
@@ -27,5 +31,11 @@ onMounted(() => {
           Warna: {{ product.warna }}<br>
           Jumlah: {{ product.jumlah }}<br>
         </li>
-      </ul>
+      </ul> -->
 </template>
+
+<style scoped>
+.mainContainer{
+  display: flex;
+}
+</style>

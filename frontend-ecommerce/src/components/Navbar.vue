@@ -161,6 +161,11 @@ const handleLogin = async () => {
   justify-content: space-between;
   padding: 10px 20px;
   background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 /* Logo Styling */

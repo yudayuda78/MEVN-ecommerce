@@ -85,12 +85,16 @@ export default {
 
 <style scoped>
 .sidebar {
+  position: fixed;
+  left: 0;
+  top: 60px;
   width: 250px;
+  height: calc(100vh - 60px);
   padding: 20px;
   background: #f9f9f9;
   border-right: 1px solid #ddd;
-  height: 100vh;
   overflow-y: auto;
+  z-index: 1000;
 }
 
 .category {
