@@ -15,26 +15,29 @@
       <div class="range-slider">
         <input
           type="range"
-          min="100"
-          max="500"
+          :min="minLimit"
+          :max="maxLimit"
+          :step="10000"
           v-model="minValue"
-          @input="updateRange"
+          @input="adjustToStep"
         />
         <input
           type="range"
-          min="100"
-          max="500"
+          :min="minLimit"
+          :max="maxLimit"
+          :step="10000"
           v-model="maxValue"
-          @input="updateRange"
+          @input="adjustToStep"
         />
         <div class="slider-track" :style="trackStyle"></div>
       </div>
       <div class="range-values">
-        <span>{{ minValue }}</span>
-        <span>{{ maxValue }}</span>
+        <span>Rp {{ formatPrice(minValue) }}</span>
+        <span>Rp {{ formatPrice(maxValue) }}</span>
       </div>
     </div>
 
+    <button class="apply-filter" @click="applyFilter">Terapkan Filter</button>
     <div class="color">
       <ul>
         Color
@@ -63,27 +66,41 @@ defineProps({
 const productStore = useProductStore()
 const selectedCategories = ref([])
 const categories = ref(['futsal', 'sepakbola', 'running',  'lifestyle' ])
+const color = ref(['red', 'blue', 'black', 'white', 'yellow', 'green'])
 
 
-
-const minValue = ref(100);
-const maxValue = ref(500);
+const minLimit = 10000;
+const maxLimit = 10000000;
+const minValue = ref(minLimit);
+const maxValue = ref(maxLimit);
 
 const trackStyle = computed(() => {
-  let minPercent = ((minValue.value - 100) / 400) * 100;
-  let maxPercent = ((maxValue.value - 100) / 400) * 100;
-  return `background: linear-gradient(to right, #ddd ${minPercent}%, #000 ${minPercent}%, #000 ${maxPercent}%, #ddd ${maxPercent}%);`;
-});
+  let minPercent = ((minValue.value - minLimit) / (maxLimit - minLimit)) * 100;
+  let maxPercent = ((maxValue.value - minLimit) / (maxLimit - minLimit)) * 100;
 
-const updateRange = () => {
-  if (minValue.value > maxValue.value) {
-    [minValue.value, maxValue.value] = [maxValue.value, minValue.value];
-  }
+  return `background: linear-gradient(to right, #ddd ${minPercent}%, #000 ${minPercent}%, #000 ${maxPercent}%, #ddd ${maxPercent}%);`;
+})
+
+
+
+const adjustToStep = () => {
+  minValue.value = Math.round(minValue.value / 10000) * 10000;
+  maxValue.value = Math.round(maxValue.value / 10000) * 10000;
+};
+
+// Format harga agar lebih rapi
+const formatPrice = (value) => {
+  return new Intl.NumberFormat("id-ID").format(value);
 };
 
 const applyFilter = () => {
   
-  productStore.fetchProducts(selectedCategories.value);
+  productStore.fetchProducts(
+    selectedCategories.value, 
+    minValue.value, 
+    maxValue.value
+  );
+  
 };
 </script>
 
@@ -139,7 +156,9 @@ li {
 .range-slider input[type="range"] {
   position: absolute;
   width: 100%;
-  -webkit-appearance: none;
+  appearance: none; /* Standar */
+  -webkit-appearance: none; /* Safari & Chrome */
+  -moz-appearance: none; 
   background: transparent;
   pointer-events: none;
 }

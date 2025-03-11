@@ -2,11 +2,15 @@ import Product from '../models/Product.js'
 
 export const index = async (req, res) => {
     try {
-        const { jenis, kategori } = req.query
+        const { jenis, kategori, minPrice = 10000, maxPrice = 100000000 } = req.query
         let filter = {}
 
         if (jenis) filter.jenis = jenis
         if (kategori) filter.kategori = { $in: kategori.split(",") }
+        const min = parseInt(minPrice) || 10000;
+        const max = parseInt(maxPrice) || 100000000;
+
+        filter.harga = { $gte: min, $lte: max };
         const products = await Product.find(filter);
         res.json(products)
     } catch (err) {
