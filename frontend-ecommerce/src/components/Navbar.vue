@@ -95,7 +95,7 @@ const handleLogin = async () => {
     <ul class="navbar__menu">
       <li><RouterLink to="/men" class="menu-item">Men</RouterLink></li>
       <li><RouterLink to="/women" class="menu-item">Women</RouterLink></li>
-      <li><RouterLink to="/kids" class="menu-item">Kids</RouterLink></li>
+      <li><RouterLink to="/kid" class="menu-item">Kid</RouterLink></li>
       <li><RouterLink to="/other" class="menu-item">Other</RouterLink></li>
     </ul>
 
