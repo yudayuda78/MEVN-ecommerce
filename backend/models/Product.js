@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
     jenis: String,
     jumlah: Number,
     harga: Number,
-    warna: String,
+    color: String,
     image: String
 });
 

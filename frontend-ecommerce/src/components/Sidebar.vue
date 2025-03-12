@@ -10,6 +10,27 @@
       </li>
     </div>
 
+    <div class="color">
+      <ul>
+        Color
+      </ul>
+      
+      <li v-for="(hex, color) in colorContent" :key="color">
+        <input 
+        type="checkbox" 
+        :id="color"  
+        :value="color" 
+        v-model="selectedColors"
+        @change="applyFilter"
+      >
+        <label :for="color" class="color-label">
+          <div class="color-box" :style="{ backgroundColor: hex }"></div>
+            {{ color }}
+        </label>
+      
+      </li>
+    </div>
+
     <div class="filter-range">
       <label>Harga</label>
       <div class="range-slider">
@@ -38,17 +59,7 @@
     </div>
 
     <button class="apply-filter" @click="applyFilter">Terapkan Filter</button>
-    <div class="color">
-      <ul>
-        Color
-      </ul>
-      <li>Red</li>
-      <li>Blue</li>
-      <li>Green</li>
-      <li>Yellow</li>
-      <li>White</li>
-      <li>Black</li>
-    </div>
+   
   </div>
 </template>
 
@@ -67,10 +78,22 @@ const productStore = useProductStore()
 const selectedCategories = ref([])
 const categories = ref(['futsal', 'sepakbola', 'running',  'lifestyle' ])
 const color = ref(['red', 'blue', 'black', 'white', 'yellow', 'green'])
+const colorContent = ref({
+  red: '#E63946',
+  blue: '#457B9D',
+  green: '#2A9D8F',
+  white: '#F8F9FA',
+  black: '#212529',
+  yellow: '#E9C46A'
+})
+const selectedColors = ref([])
+console.log(selectedCategories.value)
+
+
 
 
 const minLimit = 10000;
-const maxLimit = 10000000;
+const maxLimit = 5000000;
 const minValue = ref(minLimit);
 const maxValue = ref(maxLimit);
 
@@ -97,6 +120,7 @@ const applyFilter = () => {
   
   productStore.fetchProducts(
     selectedCategories.value, 
+    selectedColors.value,
     minValue.value, 
     maxValue.value
   );
@@ -196,5 +220,15 @@ li {
   justify-content: space-between;
   width: 100%;
   margin-top: 5px;
+}
+.color label{
+  display: flex;
+}
+
+.color-box{
+ 
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
 }
 </style>
