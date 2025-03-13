@@ -13,7 +13,7 @@ export const index = async (req, res) => {
         const max = parseInt(maxPrice) || 100000000;
 
         filter.harga = { $gte: min, $lte: max };
-
+        
         
         const products = await Product.find(filter);
         res.json(products)

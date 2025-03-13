@@ -64,15 +64,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useProductStore } from "@/stores/productStore";
+import { useRoute } from "vue-router";
 
-defineProps({
-  DataList: {
-    type: Array,
-    required: true,
-  },
-});
+
+const route = useRoute()
+const jenis = ref(route.path.replace("/", ""))
+
+watch(() => route.path, (newPath) => {
+  jenis.value = newPath.replace("/", "");
+  applyFilter()
+})
 
 const productStore = useProductStore()
 const selectedCategories = ref([])
@@ -87,7 +90,7 @@ const colorContent = ref({
   yellow: '#E9C46A'
 })
 const selectedColors = ref([])
-console.log(selectedCategories.value)
+
 
 
 
@@ -119,6 +122,7 @@ const formatPrice = (value) => {
 const applyFilter = () => {
   
   productStore.fetchProducts(
+    jenis.value,
     selectedCategories.value, 
     selectedColors.value,
     minValue.value, 

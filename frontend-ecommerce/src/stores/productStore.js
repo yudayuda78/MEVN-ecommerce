@@ -6,10 +6,17 @@ export const useProductStore = defineStore('product', () => {
   const productData = ref([]);
 
   
-  const fetchProducts = async (selectedCategories = [], selectedColor = [], minPrice = 10000, maxPrice = 5000000, ) => {
+  const fetchProducts = async (jenis = '', selectedCategories = [], selectedColor = [], minPrice = 10000, maxPrice = 5000000, ) => {
     try {
+      if (Array.isArray(jenis)) {
+        jenis = jenis[0] || ''; // Ambil elemen pertama jika jenis adalah array
+      }
+
+      
       let queryParams = [];
       
+    
+      if (jenis) queryParams.push(`jenis=${jenis}`)
       if (selectedCategories.length) {
         queryParams.push(`kategori=${selectedCategories.join(",")}`)
       }
@@ -25,7 +32,7 @@ export const useProductStore = defineStore('product', () => {
 
       const queryString = queryParams.length ? `?${queryParams.join("&")}` : "";
       
-      
+     
       const response = await axios.get(`http://localhost:9887/api/product${queryString}`);
       productData.value = response.data;
     } catch (error) {

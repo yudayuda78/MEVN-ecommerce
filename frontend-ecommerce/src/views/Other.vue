@@ -1,37 +1,41 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch} from 'vue'
 import Navbar from '../components/Navbar.vue'
+import { useRoute } from 'vue-router';
 import Sidebar from '../components/Sidebar.vue'
 import { useProductStore } from '@/stores/productStore';
 import Product from '../components/Product.vue';
 
+const route = useRoute();
 const productStore = useProductStore()
-
-
-
+const jenis = ref('other')
 
 onMounted(() => {
   productStore.fetchProducts();
 })
+
+watch(() => route.path, (newPath) => {
+  if (newPath === '/men') jenis.value = 'men';
+  else if (newPath === '/women') jenis.value = 'women';
+  else if (newPath === '/kid') jenis.value = 'kid';
+  else if (newPath === '/other') jenis.value = 'other'
+
+  productStore.fetchProducts(jenis.value);
+});
+
+console.log(jenis.value)
+
+
 
 
 </script>
 
 <template>
   <div class="mainContainer">
-    <Sidebar :DataList="DataList" />
+    <Sidebar  />
     <Product />
   </div>
-  <!-- <p>Data Product:</p>
-      <ul>
-        
-        <li v-for="(product, index) in productStore.productData" :key="product._id">
-          <strong>{{ product.nama_product }}</strong><br>
-          Merk: {{ product.merk }}<br>
-          Warna: {{ product.warna }}<br>
-          Jumlah: {{ product.jumlah }}<br>
-        </li>
-      </ul> -->
+ 
 </template>
 
 <style scoped>
