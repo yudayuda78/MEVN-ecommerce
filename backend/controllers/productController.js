@@ -3,7 +3,7 @@ import Product from '../models/Product.js'
 export const index = async (req, res) => {
     try {
         
-        const { jenis, kategori, color, minPrice = 10000, maxPrice = 100000000 } = req.query
+        const { jenis, kategori, color, minPrice = 10000, maxPrice = 100000000, search } = req.query
         let filter = {}
 
         if (jenis) filter.jenis = jenis
@@ -14,7 +14,9 @@ export const index = async (req, res) => {
 
         filter.harga = { $gte: min, $lte: max };
         
-        
+        if (search) {
+            filter.nama_product = { $regex: search, $options: "i" }; // Case-insensitive search
+        }
         const products = await Product.find(filter);
         res.json(products)
     } catch (err) {
