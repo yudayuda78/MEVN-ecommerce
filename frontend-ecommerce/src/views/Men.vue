@@ -5,42 +5,27 @@ import { useRoute } from 'vue-router';
 import Sidebar from '../components/Sidebar.vue'
 import { useProductStore } from '@/stores/productStore';
 import Product from '../components/Product.vue';
+import { storeToRefs } from 'pinia'
 
 const route = useRoute();
 const productStore = useProductStore()
+const { searchQuery } = storeToRefs(productStore)
 const jenis = ref('men')
 
 onMounted(() => {
   productStore.fetchProducts(jenis.value);
 })
 
-watch(
-  () => route.path,
-  (newPath) => {
-    let newJenis = '';
-
-    if (newPath === '/men') newJenis = 'men';
-    else if (newPath === '/women') newJenis = 'women';
-    else if (newPath === '/kid') newJenis = 'kid';
-    else if (newPath === '/other') newJenis = 'other';
-
-   
-    
-    // Pastikan newJenis tetap string sebelum diassign
-    if (typeof newJenis !== 'string') {
-      console.log("⚠️ WARNING: newJenis bukan string!", newJenis);
-      newJenis = 'men'; // Default
-    }
-
-    jenis.value = newJenis;
-    
-
-    productStore.fetchProducts(jenis.value);
-  },
-  { immediate: true }
-);
 
 
+
+
+  
+
+
+watch(searchQuery, () => {
+  productStore.fetchProducts(jenis.value, [], [], 10000, 5000000, searchQuery.value);
+});
 
 
 

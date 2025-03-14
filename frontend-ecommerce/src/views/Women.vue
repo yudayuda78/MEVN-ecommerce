@@ -5,16 +5,21 @@ import { useRoute } from 'vue-router';
 import Sidebar from '../components/Sidebar.vue'
 import { useProductStore } from '@/stores/productStore';
 import Product from '../components/Product.vue';
+import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const productStore = useProductStore()
 const jenis = ref('women')
+const { searchQuery } = storeToRefs(productStore)
 
 onMounted(() => {
   productStore.fetchProducts(jenis.value);
 })
 
 
+watch(searchQuery, () => {
+  productStore.fetchProducts(jenis.value, [], [], 10000, 5000000, searchQuery.value);
+});
 
 
 

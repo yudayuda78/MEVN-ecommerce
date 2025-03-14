@@ -14,9 +14,17 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 
-const searchQuery = ref("");
+import { storeToRefs } from "pinia";
+import { useProductStore } from "@/stores/productStore";
+
+const productStore = useProductStore();
+const { searchQuery } = storeToRefs(productStore)
+
+
+
+
+
 </script>
 
 <style scoped>
