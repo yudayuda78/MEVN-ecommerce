@@ -3,7 +3,7 @@ import Product from '../models/Product.js'
 export const index = async (req, res) => {
     try {
         
-        const { jenis, kategori, color, minPrice = 10000, maxPrice = 100000000, search } = req.query
+        const { jenis, kategori, color, minPrice = 10000, maxPrice = 100000000, search, page = 1, limit = 10 } = req.query
         let filter = {}
 
         if (jenis) filter.jenis = jenis
@@ -17,8 +17,20 @@ export const index = async (req, res) => {
         if (search) {
             filter.nama_product = { $regex: search, $options: "i" }; // Case-insensitive search
         }
-        const products = await Product.find(filter);
-        res.json(products)
+
+        const pageNumber = parseInt(page) || 1;
+        const pageSize = parseInt(limit) || 10;
+        const skip = (pageNumber - 1) * pageSize;
+
+        // Hitung total produk yang sesuai filter
+        const totalProducts = await Product.countDocuments(filter)
+
+        const products = await Product.find(filter).skip(skip).limit(pageSize)
+        res.json( {data: products,
+            current_page: pageNumber,
+            last_page: Math.ceil(totalProducts / pageSize),
+            per_page: pageSize,
+            total: totalProducts,})
     } catch (err) {
         res.status(500).json({ message: "Terjadi kesalahan pada server!" })
     }
