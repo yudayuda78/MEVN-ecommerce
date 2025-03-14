@@ -24,10 +24,11 @@
 <style scoped>
 .container {
   display: flex;
-  width: 100%;
+  width: 82%;
   flex-direction: column;
-  margin-left: 250px;
+  margin-left: 270px;
   padding-top: 60px;
+  background-color: blanchedalmond;
 }
 
 .cardContainer {

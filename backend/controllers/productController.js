@@ -3,7 +3,7 @@ import Product from '../models/Product.js'
 export const index = async (req, res) => {
     try {
         
-        const { jenis, kategori, color, minPrice = 10000, maxPrice = 100000000, search, page = 1, limit = 10 } = req.query
+        const { jenis, kategori, color, minPrice = 10000, maxPrice = 100000000, search, page = 1, limit = 12 } = req.query
         let filter = {}
 
         if (jenis) filter.jenis = jenis
@@ -19,7 +19,7 @@ export const index = async (req, res) => {
         }
 
         const pageNumber = parseInt(page) || 1;
-        const pageSize = parseInt(limit) || 10;
+        const pageSize = parseInt(limit) || 12;
         const skip = (pageNumber - 1) * pageSize;
 
         // Hitung total produk yang sesuai filter

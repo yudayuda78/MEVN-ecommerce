@@ -137,7 +137,7 @@ const applyFilter = () => {
   position: fixed;
   left: 0;
   top: 60px;
-  width: 250px;
+  width: 20%;
   height: calc(100vh - 60px);
   padding: 20px;
   background: #f9f9f9;
