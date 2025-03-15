@@ -7,7 +7,11 @@
       <p class="card-quantity">{{ product.jumlah }}</p>
     </div>
     <div class="buttonCard">
-        <button>Buy</button>
+        <RouterLink to="/product/:id">
+          <button>Buy</button>
+        </RouterLink>
+        
+
         <button>Add to Cart</button>
     </div>
     
@@ -15,6 +19,9 @@
 </template>
 
 <script setup>
+import { RouterLink, useRouter } from 'vue-router'
+
+
 defineProps({
   product: Object,
 })

@@ -4,6 +4,7 @@ import axios from 'axios';
 
 export const useProductStore = defineStore('product', () => {
   const productData = ref([]);
+  const detailProductData = ref(null)
   const searchQuery = ref("");
   const currentPage = ref(1); // Simpan halaman aktif
   const lastPage = ref(1);
@@ -46,15 +47,16 @@ export const useProductStore = defineStore('product', () => {
   const detailProduct = async (id) => {
     try {
       const response = await axios.get(`http://localhost:9887/api/product/${id}`);
-      return response.data; 
+      detailProductData.value = response.data;
     } catch (error) {
       console.error("Gagal mengambil detail produk:", error);
-      return null;
+      detailProductData.value = null;
     }
   };
 
   return {
     productData,
+    detailProductData,
     fetchProducts,
     searchQuery,
     currentPage,

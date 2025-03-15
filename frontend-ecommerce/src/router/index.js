@@ -6,6 +6,7 @@ import Women from '../views/Women.vue'
 import Kid from '@/views/Kid.vue'
 import Other from '@/views/Other.vue'
 import Cart from '@/views/Cart.vue'
+import DetailProduct from '@/views/DetailProduct.vue'
 
 import { useAuthStore } from '@/stores/authStore'
 
@@ -16,7 +17,8 @@ const routes = [
     { path: '/women', name: 'Women', component: Women},
     { path: '/kid', name: 'Kid', component: Kid},
     { path: '/other', name: 'Other', component: Other},
-    { path: '/cart', name: 'Cart', component: Cart}
+    { path: '/cart', name: 'Cart', component: Cart},
+    {path: '/product/:id', component: DetailProduct, prop:true}
     
 ]
 
