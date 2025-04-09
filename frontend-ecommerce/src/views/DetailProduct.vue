@@ -10,7 +10,7 @@ const productStore = useProductStore();
 const { detailProductData } = storeToRefs(productStore);
 
 onMounted(async () => {
-  await productStore.fetchDetailProduct(route.params.id);
+  await productStore.detailProduct(route.params.id);
 });
 
 // Kembali ke halaman sebelumnya

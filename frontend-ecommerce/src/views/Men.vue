@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import Navbar from '../components/Navbar.vue';
 import { useRoute } from 'vue-router';
 import Sidebar from '../components/Sidebar.vue';
 import { useProductStore } from '@/stores/productStore';

@@ -1,8 +1,17 @@
 <script setup>
-import Navbar from '../components/Navbar.vue';
+
 import FormAccount from '@/components/form/FormAccount.vue';
 </script>
 
 <template>
-  <FormAccount />
+  <div class="form-account-wrapper">
+    <FormAccount />
+  </div>
 </template>
+
+
+<style scoped>
+  .form-account-wrapper {
+      margin-top: 60px;
+  }
+</style>

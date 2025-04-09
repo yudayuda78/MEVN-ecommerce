@@ -1,4 +1,5 @@
 <template>
+  <RouterLink :to="`/product/${product._id}`">
   <div class="card">
     <img class="card-image" />
     <div class="card-body">
@@ -7,15 +8,16 @@
       <p class="card-quantity">{{ product.jumlah }}</p>
     </div>
     <div class="buttonCard">
-        <RouterLink to="/product/:id">
+        
           <button>Buy</button>
-        </RouterLink>
+        
         
 
         <button>Add to Cart</button>
     </div>
     
   </div>
+</RouterLink>
 </template>
 
 <script setup>

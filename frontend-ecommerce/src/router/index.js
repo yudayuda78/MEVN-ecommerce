@@ -18,7 +18,7 @@ const routes = [
     { path: '/kid', name: 'Kid', component: Kid},
     { path: '/other', name: 'Other', component: Other},
     { path: '/cart', name: 'Cart', component: Cart},
-    {path: '/product/:id', component: DetailProduct, prop:true}
+    {path: '/product/:id', name:'DetailProduct', component: DetailProduct, prop:true}
     
 ]
 
