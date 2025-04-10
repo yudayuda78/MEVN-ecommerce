@@ -12,6 +12,7 @@ const isLoggedIn = ref(false)
 const isLoginModalOpen = ref(false)
 const isRegisterModalOpen = ref(false)
 const isDropdownOpen = ref(false)
+const isDropdownOpenCart =ref(false)
 
 const closeLoginModal = () => {
   isLoginModalOpen.value = false
@@ -25,6 +26,12 @@ const closeRegisterModal = () => {
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
 }
+
+const toggleDropdownCart = () => {
+  isDropdownOpenCart.value = !isDropdownOpenCart.value
+}
+
+
 
 const closeDropdown = (event) => {
   if (!event.target.closest('.navbar__account')) {
@@ -100,10 +107,20 @@ const handleLogin = async () => {
     </ul>
 
     <!-- Cart dengan counter -->
-    <RouterLink to="/cart" class="navbar__cart">
+     <div class="cart_menu">
+      <button @click="toggleDropdownCart">
         <i class="ri-shopping-cart-fill"></i>
-      <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
-    </RouterLink>
+        <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+      </button>
+      <div v-if="isDropdownOpenCart" class="dropdown-menu-cart">
+        <RouterLink to="/cart" class="dropdown-item-cart">Profile</RouterLink>
+      </div>
+      <RouterLink to="/cart" class="navbar__cart">
+          <i class="ri-shopping-cart-fill"></i>
+        
+      </RouterLink>
+     </div>
+   
 
     <!-- Account Icon -->
     <div class="navbar__account" v-if="authStore.isLoggedIn">
@@ -207,6 +224,8 @@ const handleLogin = async () => {
   justify-content: center;
   width: auto;
 }
+
+
 
 /* Cart Styling */
 .navbar__cart {
