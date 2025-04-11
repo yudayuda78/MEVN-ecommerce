@@ -6,7 +6,7 @@ import axios from 'axios'
 import millsLogo from '@/assets/mills.webp'
 
 // State untuk jumlah item di cart
-const cartCount = ref(0)
+const cartCount = ref(1)
 const router = useRouter()
 const isLoggedIn = ref(false)
 const isLoginModalOpen = ref(false)
@@ -115,10 +115,7 @@ const handleLogin = async () => {
       <div v-if="isDropdownOpenCart" class="dropdown-menu-cart">
         <RouterLink to="/cart" class="dropdown-item-cart">Profile</RouterLink>
       </div>
-      <RouterLink to="/cart" class="navbar__cart">
-          <i class="ri-shopping-cart-fill"></i>
-        
-      </RouterLink>
+      
      </div>
    
 
@@ -228,6 +225,32 @@ const handleLogin = async () => {
 
 
 /* Cart Styling */
+.cart_menu button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.cart_menu button i{
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+}
+
+.dropdown-menu-cart{
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 10;
+}
+
 .navbar__cart {
   position: relative;
   font-weight: bold;
@@ -245,7 +268,7 @@ const handleLogin = async () => {
 .cart-badge {
   position: absolute;
   top: -5px;
-  right: -10px;
+  right: 60px;
   background: red;
   color: white;
   font-size: 12px;
