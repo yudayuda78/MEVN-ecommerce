@@ -15,7 +15,7 @@ export const getCartByUser = async(req, res) =>{
     
 
     try {
-        const cart = await Cart.find({ user_id })
+        const cart = await Cart.find({ user_id }).populate('items.product_id')
         res.json(cart)
     } catch (error) {
         console.error("❌ Error getCartByUser:", error)
