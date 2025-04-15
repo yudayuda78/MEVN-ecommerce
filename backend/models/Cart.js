@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { mongo } from "mongoose"
 
 const cartSchema = new mongoose.Schema({
     user_id: mongoose.Schema.Types.ObjectId,
