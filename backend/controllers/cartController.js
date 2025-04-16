@@ -38,7 +38,7 @@ export const addProductToCart = async(req, res) =>{
               cart.items.push({ product_id, quantity: 1 })
             }
       
-            // Update updated_at
+            
             cart.updated_at = new Date()
             await cart.save()
             const populatedCart = await Cart.findById(cart._id).populate('items.product_id');
