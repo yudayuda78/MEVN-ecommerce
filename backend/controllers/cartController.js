@@ -1,12 +1,12 @@
-import Cart from "../models/Cart.js";
+import Cart from "../models/Cart.js"
 
 export const index = async (req, res) => {
     try {
-        const carts = await Cart.find(); // Ambil semua data cart
-        res.json(carts); // Kirim sebagai response JSON
+        const carts = await Cart.find()
+        res.json(carts)
     } catch (error) {
         console.error("Error fetching carts:", error);
-        res.status(500).json({ message: "Terjadi kesalahan saat mengambil data cart." });
+        res.status(500).json({ message: "Terjadi kesalahan saat mengambil data cart." })
     }
 }
 
@@ -20,5 +20,47 @@ export const getCartByUser = async(req, res) =>{
     } catch (error) {
         console.error("❌ Error getCartByUser:", error)
         res.status(500).json({ message: "Gagal mengambil cart" })
+    }
+}
+
+export const addProductToCart = async(req, res) =>{
+    try{
+        const {product_id} = req.body
+        const idUser = req.user._id
+        const cart = await Cart.findOne({user_id: idUser})
+
+        if (cart) {
+            // Cek apakah product_id sudah ada di items
+            const itemIndex = cart.items.findIndex(item => item.product_id.equals(product_id))
+      
+            if (itemIndex > -1) {
+              // Kalau produk sudah ada, tambahkan quantity-nya
+              cart.items[itemIndex].quantity += 1
+            } else {
+              // Kalau belum ada, push item baru
+              cart.items.push({ product_id, quantity: 1 })
+            }
+      
+            // Update updated_at
+            cart.updated_at = new Date()
+            await cart.save()
+            const populatedCart = await Cart.findById(cart._id).populate('items.product_id');
+            return res.status(200).json(populatedCart)
+        } else {
+            // Kalau belum ada cart, buat baru
+            const newCart = new Cart({
+              user_id: idUser,
+              items: [{ product_id, quantity: 1 }],
+              status: 'active'
+            })
+      
+            await newCart.save()
+            const populatedCart = await Cart.findById(newCart._id).populate('items.product_id');
+            return res.status(201).json(populatedCart)
+        }     
+        
+    } catch(error){
+        console.error("Error fetching carts:", error);
+        res.status(500).json({ message: "Terjadi kesalahan saat mengambil data cart." })
     }
 }

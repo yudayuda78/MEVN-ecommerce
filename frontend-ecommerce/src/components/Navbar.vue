@@ -113,7 +113,13 @@ const handleLogin = async () => {
         <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
       </button>
       <div v-if="isDropdownOpenCart" class="dropdown-menu-cart">
-        <RouterLink to="/cart" class="dropdown-item-cart">Profile</RouterLink>
+        <div class="product">
+          <p>No. 1</p>
+          <div class="pict"></div>
+          <p>Mills</p>
+          <p>Jumlah: </p>
+        </div>
+        <RouterLink to="/cart" class="dropdown-item-cart">Check Out</RouterLink>
       </div>
       
      </div>
