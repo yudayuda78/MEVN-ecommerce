@@ -30,14 +30,11 @@ export const addProductToCart = async(req, res) =>{
         const cart = await Cart.findOne({user_id: idUser})
 
         if (cart) {
-            // Cek apakah product_id sudah ada di items
             const itemIndex = cart.items.findIndex(item => item.product_id.equals(product_id))
       
             if (itemIndex > -1) {
-              // Kalau produk sudah ada, tambahkan quantity-nya
               cart.items[itemIndex].quantity += 1
             } else {
-              // Kalau belum ada, push item baru
               cart.items.push({ product_id, quantity: 1 })
             }
       
@@ -47,7 +44,6 @@ export const addProductToCart = async(req, res) =>{
             const populatedCart = await Cart.findById(cart._id).populate('items.product_id');
             return res.status(200).json(populatedCart)
         } else {
-            // Kalau belum ada cart, buat baru
             const newCart = new Cart({
               user_id: idUser,
               items: [{ product_id, quantity: 1 }],
