@@ -71,7 +71,7 @@ export const decreaseProductCart = async (req, res) => {
             res.status(404).json({message:"data cart tidak ditemukan"})
         }
         
-        const itemIndex = cart.item.findIndex(item => item.product_id.equals(product_id))
+        const itemIndex = cart.items.findIndex(item => item.product_id.equals(product_id))
 
         if (itemIndex === -1) {
             return res.status(404).json({ message: 'Produk tidak ditemukan di cart.' })
