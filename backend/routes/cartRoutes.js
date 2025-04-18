@@ -1,5 +1,5 @@
 import express from 'express'
-import { index, getCartByUser, decreaseProductCart } from '../controllers/cartController.js'
+import { index, getCartByUser, decreaseProductCart, deleteCart } from '../controllers/cartController.js'
 import { addProductToCart } from '../controllers/cartController.js'
 import { authMiddleware } from '../middleware/authMiddleware.js'
 
@@ -8,5 +8,6 @@ router.get('/', index)
 router.get('/user/:user_id', getCartByUser)
 router.put('/addProductToCart', authMiddleware, addProductToCart)
 router.post('/decrease', authMiddleware, decreaseProductCart )
+router.delete('/delete', authMiddleware, deleteCart)
 
 export default router
