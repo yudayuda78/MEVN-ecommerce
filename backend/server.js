@@ -37,10 +37,12 @@ mongoose.connect(process.env.MONGO_URI)
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 app.use('/api/product', productRoutes)
 app.use('/api/user', userRoutes) 
 app.use('/api/cart', cartRoutes)
+app.use('/api/order', orderRoutes)
 
 
 // Tes endpoint utama
