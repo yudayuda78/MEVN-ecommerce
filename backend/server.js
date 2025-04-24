@@ -1,57 +1,17 @@
-import express from 'express'
+// server.js
 import mongoose from 'mongoose'
-import cors from 'cors'
 import dotenv from 'dotenv'
-// import cookieParser from 'cookie-parser'
-// import morgan from 'morgan'
+import app from './app.js'
 
 dotenv.config()
 
-const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 5000
 
-// Middleware untuk parsing JSON
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-// app.use(cookieParser())
-// if(process.env.NODE_ENV === "development"){
-//     app.user(morgan(dev))
-// }
-
-
-// Cors
-app.use(cors({ 
-    origin: 'http://localhost:5173',
-    methods: 'GET,POST,PUT,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type, Authorization'
-}));
-
-
-
-// Koneksi ke MongoDB
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ Koneksi MongoDB berhasil!"))
+    .then(() => {
+        console.log("✅ Koneksi MongoDB berhasil!")
+        app.listen(PORT, () => {
+            console.log(`🚀 Server berjalan di: http://localhost:${PORT}`)
+        })
+    })
     .catch(err => console.error("❌ Koneksi MongoDB gagal:", err))
-
-// Import routes
-import productRoutes from './routes/productRoutes.js'
-import userRoutes from './routes/userRoutes.js'
-import cartRoutes from './routes/cartRoutes.js'
-import orderRoutes from './routes/orderRoutes.js'
-
-app.use('/api/product', productRoutes)
-app.use('/api/user', userRoutes) 
-app.use('/api/cart', cartRoutes)
-app.use('/api/order', orderRoutes)
-
-
-// Tes endpoint utama
-app.get('/', (req, res) => {
-    res.send("Server berjalan...");
-});
-
-app.listen(PORT, () => {
-    console.log(`🚀 Server berjalan di: http://localhost:${PORT}`);
-});
-
-
