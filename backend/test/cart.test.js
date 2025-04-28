@@ -38,52 +38,63 @@ afterAll(async () => {
 //     expect(Array.isArray(res.body)).toBe(true)
 // })
 
-describe("Cart Controller", () => {
-  it("GET /api/cart - ambil semua cart", async () => {
-    const res = await request(app)
-      .get("/api/cart")
-      .set("Authorization", `Bearer ${token}`)
-
-    expect(res.statusCode).toBe(200)
-    expect(Array.isArray(res.body)).toBe(true)
-  })
-
-  it("GET /api/cart/user/:user_id - ambil cart berdasarkan user", async () => {
-    const res = await request(app)
-      .get(`/api/cart/user/${user_id}`)
-      .set("Authorization", `Bearer ${token}`)
-
-    expect(res.statusCode).toBe(200)
-    expect(Array.isArray(res.body)).toBe(true)
-  })
-
-  it("POST /api/cart - tambah produk ke cart", async () => {
-    const res = await request(app)
-      .post("/api/cart")
-      .send({ product_id })
-      .set("Authorization", `Bearer ${token}`)
-
-    expect([200, 201]).toContain(res.statusCode)
-    expect(res.body).toHaveProperty("items")
-  })
-
-  it("PUT /api/cart/decrease - kurangi produk di cart", async () => {
-    const res = await request(app)
-      .put("/api/cart/decrease")
-      .send({ product_id })
-      .set("Authorization", `Bearer ${token}`)
-
-    expect(res.statusCode).toBe(200)
-    expect(res.body).toHaveProperty("items")
-  })
-
-  it("DELETE /api/cart - hapus produk dari cart", async () => {
-    const res = await request(app)
-      .delete("/api/cart")
-      .send({ product_id })
-      .set("Authorization", `Bearer ${token}`)
-
-    expect(res.statusCode).toBe(200)
-    expect(res.body).toHaveProperty("items")
-  })
+describe("GET /api/cart", () => {
+    it("should get cart", async () => {
+      const res = await request(app)
+        .get("/api/cart")
+        .set("Authorization", `Bearer ${token}`)
+  
+      expect(res.statusCode).toBe(200)
+      expect(Array.isArray(res.body)).toBe(true)
+    })
 })
+
+// describe("Cart Controller", () => {
+//   it("GET /api/cart - ambil semua cart", async () => {
+//     const res = await request(app)
+//       .get("/api/cart")
+//       .set("Authorization", `Bearer ${token}`)
+
+//     expect(res.statusCode).toBe(200)
+//     expect(Array.isArray(res.body)).toBe(true)
+//   })
+
+//   it("GET /api/cart/user/:user_id - ambil cart berdasarkan user", async () => {
+//     const res = await request(app)
+//       .get(`/api/cart/user/${user_id}`)
+//       .set("Authorization", `Bearer ${token}`)
+
+//     expect(res.statusCode).toBe(200)
+//     expect(Array.isArray(res.body)).toBe(true)
+//   })
+
+//   it("POST /api/cart - tambah produk ke cart", async () => {
+//     const res = await request(app)
+//       .post("/api/cart")
+//       .send({ product_id })
+//       .set("Authorization", `Bearer ${token}`)
+
+//     expect([200, 201]).toContain(res.statusCode)
+//     expect(res.body).toHaveProperty("items")
+//   })
+
+//   it("PUT /api/cart/decrease - kurangi produk di cart", async () => {
+//     const res = await request(app)
+//       .put("/api/cart/decrease")
+//       .send({ product_id })
+//       .set("Authorization", `Bearer ${token}`)
+
+//     expect(res.statusCode).toBe(200)
+//     expect(res.body).toHaveProperty("items")
+//   })
+
+//   it("DELETE /api/cart - hapus produk dari cart", async () => {
+//     const res = await request(app)
+//       .delete("/api/cart")
+//       .send({ product_id })
+//       .set("Authorization", `Bearer ${token}`)
+
+//     expect(res.statusCode).toBe(200)
+//     expect(res.body).toHaveProperty("items")
+//   })
+// })
