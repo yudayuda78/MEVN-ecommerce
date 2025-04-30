@@ -62,6 +62,14 @@ describe("Get /api/cart/user/:user_id", () => {
     })
 })
 
+describe("PUT /api/cart/addProductToCart", () => {
+    it("should add cart", async () => {
+        const res = await request(app).put('/api/cart/addProductToCart').set("Authorization", `Bearer ${token}`)
+
+        console.log(res.body)
+    })
+})
+
 // describe("Cart Controller", () => {
 //   it("GET /api/cart - ambil semua cart", async () => {
 //     const res = await request(app)
