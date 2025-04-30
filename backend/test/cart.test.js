@@ -51,16 +51,14 @@ describe("GET /api/cart", () => {
   
 })
 
-describe("Get /api/user/:user_id", () => {
+describe("Get /api/cart/user/:user_id", () => {
     it("should get cart by user", async () => {
-        const res = await request(app).get(`/api/user/${user_id}`)
-        console.log("Status Code:", res.statusCode)
-    console.log("Headers:", res.headers)
-    console.log("Body (parsed):", res.body)
-    console.log("Body (raw text):", res.text)
+        const res = await request(app).get(`/api/cart/user/${user_id}`)
+        
 
-    expect(res.statusCode).toBe(200)
-    expect(Array.isArray(res.body)).toBe(true)
+        expect(res.statusCode).toBe(200)
+        expect(res.body[0].user_id).toBe(user_id)
+        
     })
 })
 
