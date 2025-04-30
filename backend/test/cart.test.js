@@ -42,10 +42,25 @@ describe("GET /api/cart", () => {
     it("should get cart", async () => {
       const res = await request(app)
         .get("/api/cart")
-        .set("Authorization", `Bearer ${token}`)
+        // .set("Authorization", `Bearer ${token}`)
   
       expect(res.statusCode).toBe(200)
       expect(Array.isArray(res.body)).toBe(true)
+    })
+
+  
+})
+
+describe("Get /api/user/:user_id", () => {
+    it("should get cart by user", async () => {
+        const res = await request(app).get(`/api/user/${user_id}`)
+        console.log("Status Code:", res.statusCode)
+    console.log("Headers:", res.headers)
+    console.log("Body (parsed):", res.body)
+    console.log("Body (raw text):", res.text)
+
+    expect(res.statusCode).toBe(200)
+    expect(Array.isArray(res.body)).toBe(true)
     })
 })
 
