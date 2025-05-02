@@ -5,7 +5,7 @@ export const blacklistedTokens = new Set(); // Gunakan Set agar bisa pakai .has(
 
 export const authMiddleware = async (req, res, next) => {
     const token = req.get("Authorization")?.split(" ")[1]
-    console.log(token)
+    // console.log(token)
     
     if(!token){
         return next(
@@ -30,7 +30,7 @@ export const authMiddleware = async (req, res, next) => {
             })
         )
     }
-    console.log(decoded)
+    // console.log(decoded)
     const currentUser = await User.findById(decoded.id)
     if(!currentUser){
         return next(

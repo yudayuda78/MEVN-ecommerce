@@ -17,7 +17,7 @@ export const index = async (req, res) => {
 
 export const register = async (req, res) => {
     try {
-        console.log("Data diterima:", req.body)
+        // console.log("Data diterima:", req.body)
 
         const { username, password, name, address, email } = req.body
 
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
 
         //generate JWT
         const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn: "1h"})
-        console.log(token)
+        // console.log(token)
 
         res.json({
             message: "Login berhasil!",
@@ -82,9 +82,9 @@ export const getUser = async (req, res) =>{
 export const logout = (req, res) => {
     try {
         let token = req.get("Authorization")?.split(" ")[1]; // Ambil token setelah 'Bearer'
-        console.log(token)
+        // console.log(token)
         blacklistedTokens.add(token); // Masukkan token ke blacklist
-        console.log("Blacklisted Tokens:", blacklistedTokens)
+        // console.log("Blacklisted Tokens:", blacklistedTokens)
         return res.json({ message: "Logout berhasil!" });
     } catch (error) {
         return res.status(500).json({ message: "Terjadi kesalahan!", error: error.message });

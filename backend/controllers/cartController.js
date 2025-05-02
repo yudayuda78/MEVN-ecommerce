@@ -1,4 +1,5 @@
 import Cart from "../models/Cart.js"
+import mongoose from 'mongoose'
 
 export const index = async (req, res) => {
     try {
@@ -30,8 +31,9 @@ export const addProductToCart = async(req, res) =>{
         const cart = await Cart.findOne({user_id: idUser})
 
         if (cart) {
+            
             const itemIndex = cart.items.findIndex(item => item.product_id.equals(product_id))
-      
+            
             if (itemIndex > -1) {
               cart.items[itemIndex].quantity += 1
             } else {

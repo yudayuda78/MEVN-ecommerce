@@ -9,7 +9,7 @@ dotenv.config()
 
 let token = ""
 let user_id = ""
-let product_id = "662222222222222222222222" // Ganti sesuai product valid di database
+let product_id = "67cda45c06b5e8ba40a537be"
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI)
@@ -19,7 +19,7 @@ beforeAll(async () => {
     .post("/api/user/login")
     .send({ email: "admin777@gmail.com", password: "admin777" }) // Ganti sesuai akun test kamu
 
-    console.log("Login response:", loginRes.body)
+    // console.log("Login response:", loginRes.body)
 
   token = loginRes.body.token
   user_id = loginRes.body.user.id // Jika response menyertakan user, simpan user_id juga
@@ -64,7 +64,9 @@ describe("Get /api/cart/user/:user_id", () => {
 
 describe("PUT /api/cart/addProductToCart", () => {
     it("should add cart", async () => {
-        const res = await request(app).put('/api/cart/addProductToCart').set("Authorization", `Bearer ${token}`)
+        const res = await request(app).put('/api/cart/addProductToCart')
+         .send({ product_id })
+         .set("Authorization", `Bearer ${token}`)
 
         console.log(res.body)
     })
@@ -73,6 +75,10 @@ describe("PUT /api/cart/addProductToCart", () => {
         expect(res.statusCode).toBe(401)
     })
 })
+
+// describe("POST /api/cart/decrease", () => {
+//     it("should decrease cart",)
+// })
 
 // describe("Cart Controller", () => {
 //   it("GET /api/cart - ambil semua cart", async () => {
