@@ -68,6 +68,10 @@ describe("PUT /api/cart/addProductToCart", () => {
 
         console.log(res.body)
     })
+    it("should give warning about authorization", async () => {
+        const res = await request(app).put('/api/cart/addProductToCart')
+        expect(res.statusCode).toBe(401)
+    })
 })
 
 // describe("Cart Controller", () => {
