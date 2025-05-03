@@ -1,33 +1,38 @@
-<template>
-  <RouterLink :to="`/product/${product._id}`">
-  <div class="card">
-    <img class="card-image" />
-    <div class="card-body">
-      <h3 class="card-title">{{ product.nama_product }}</h3>
-      <p class="card-price">Rp{{ product.harga }}</p>
-      <p class="card-quantity">{{ product.jumlah }}</p>
-    </div>
-    <div class="buttonCard">
-        
-          <button>Buy</button>
-        
-        
-
-        <button>Add to Cart</button>
-    </div>
-    
-  </div>
-</RouterLink>
-</template>
-
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cartStore';
 
+const cartStore = useCartStore()
+
+const buttonAddCart = (productId) => {
+  cartStore.addToCart(productId)
+}
 
 defineProps({
   product: Object,
 })
 </script>
+
+
+<template>
+  <div class="card">
+    <RouterLink :to="`/product/${product._id}`">
+      <img class="card-image" />
+      <div class="card-body">
+        <h3 class="card-title">{{ product.nama_product }}</h3>
+        <p class="card-price">Rp{{ product.harga }}</p>
+        <p class="card-quantity">{{ product.jumlah }}</p>
+      </div>
+    </RouterLink>
+    <div class="buttonCard">
+      <button>Buy</button>
+      <button @click="buttonAddCart(product._id)">Add to Cart</button>
+    </div>
+  </div>
+</template>
+
+
+
 
 <style scoped>
 .card {

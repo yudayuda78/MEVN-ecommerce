@@ -88,6 +88,16 @@ describe("POST /api/cart/decrease", () => {
     
 })
 
+describe("DELETE /api/cart/delete", () => {
+    it("should delete cart", async () => {
+        const res = await request(app).delete('/api/cart/delete')
+         .send({product_id})
+         .set("Authorization", `Bearer ${token}`)
+        expect(res.statusCode).toBe(200)
+    })
+}
+)
+
 // describe("POST /api/cart/decrease", () => {
 //     it("should decrease cart",)
 // })
