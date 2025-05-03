@@ -68,12 +68,24 @@ describe("PUT /api/cart/addProductToCart", () => {
          .send({ product_id })
          .set("Authorization", `Bearer ${token}`)
 
-        console.log(res.body)
+         expect(res.statusCode).toBe(200)
     })
     it("should give warning about authorization", async () => {
         const res = await request(app).put('/api/cart/addProductToCart')
         expect(res.statusCode).toBe(401)
     })
+})
+
+describe("POST /api/cart/decrease", () => {
+    it("should decrease cart", async () => {
+        const res = await request(app).post('/api/cart/decrease')
+         .send({product_id})
+         .set("Authorization", `Bearer ${token}`)
+
+         expect(res.statusCode).toBe(200)
+    })
+
+    
 })
 
 // describe("POST /api/cart/decrease", () => {
