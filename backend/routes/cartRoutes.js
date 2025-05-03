@@ -5,7 +5,7 @@ import { authMiddleware } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 router.get('/', index)
-router.get('/user/:user_id', getCartByUser)
+router.get('/product', authMiddleware, getCartByUser)
 router.put('/addProductToCart', authMiddleware, addProductToCart)
 router.post('/decrease', authMiddleware, decreaseProductCart )
 router.delete('/delete', authMiddleware, deleteCart)

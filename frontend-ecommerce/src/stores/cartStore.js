@@ -4,7 +4,26 @@ import axios from "axios"
 
 export const useCartStore = defineStore('cart', () => {
     const cartItems = ref([])
-    const productID = ([])
+    
+
+    const getProductByUser = async () => {
+        try{
+            const token = localStorage.getItem('token')
+            const response = await axios.get(
+                'http://localhost:9887/api/cart/product',
+                {
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    }
+                  } 
+            )
+
+            cartItems.value = response.data // ← simpan hasil ke state
+            console.log('Cart Items:', JSON.stringify(cartItems.value, null, 2));
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     const addToCart = async(productID) => {
         try{
@@ -19,6 +38,7 @@ export const useCartStore = defineStore('cart', () => {
                 }
             )
             console.log('produk berhasil ditambahkan')
+            await getProductByUser()
                 
             
         }catch(error){
@@ -27,6 +47,8 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     return{
+        cartItems,
+        getProductByUser,
         addToCart
     }
     

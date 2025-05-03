@@ -12,7 +12,7 @@ export const index = async (req, res) => {
 }
 
 export const getCartByUser = async(req, res) =>{
-    const {user_id} =req.params
+    const user_id = req.user._id
     
 
     try {

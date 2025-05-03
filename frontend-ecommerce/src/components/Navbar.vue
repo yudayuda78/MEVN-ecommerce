@@ -1,94 +1,102 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
-import axios from 'axios'
-import millsLogo from '@/assets/mills.webp'
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
+import { useCartStore } from "@/stores/cartStore";
+import axios from "axios";
+import millsLogo from "@/assets/mills.webp";
 
-// State untuk jumlah item di cart
-const cartCount = ref(1)
-const router = useRouter()
-const isLoggedIn = ref(false)
-const isLoginModalOpen = ref(false)
-const isRegisterModalOpen = ref(false)
-const isDropdownOpen = ref(false)
-const isDropdownOpenCart =ref(false)
-
-const closeLoginModal = () => {
-  isLoginModalOpen.value = false
-}
-
-const closeRegisterModal = () => {
-  isRegisterModalOpen.value = false
-  isLoginModalOpen.value = false
-}
-
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value
-}
-
-const toggleDropdownCart = () => {
-  isDropdownOpenCart.value = !isDropdownOpenCart.value
-}
-
-
+const cartStore = useCartStore();
 
 const closeDropdown = (event) => {
-  if (!event.target.closest('.navbar__account')) {
-    isDropdownOpen.value = false
+  if (!event.target.closest(".navbar__account")) {
+    isDropdownOpen.value = false;
   }
-}
+};
 
 onMounted(async () => {
-        if (authStore.isLoggedIn) {
-            await authStore.getUser();
-        }
-    });
+  if (authStore.isLoggedIn) {
+    await authStore.getUser();
+    await cartStore.getProductByUser();
+  }
+});
 
 onMounted(() => {
-  document.addEventListener('click', closeDropdown)
-})
+  document.addEventListener("click", closeDropdown);
+});
 
 // Hapus event listener saat komponen di-unmount
 onUnmounted(() => {
-  document.removeEventListener('click', closeDropdown)
-})
+  document.removeEventListener("click", closeDropdown);
+});
+
+//state cart
+const cartCount = computed(() => {
+  return cartStore.cartItems.reduce((total, cart) => {
+    return total + cart.items.reduce((sum, item) => sum + item.quantity, 0);
+  }, 0);
+});
+
+// State untuk jumlah item di cart
+
+const router = useRouter();
+const isLoggedIn = ref(false);
+const isLoginModalOpen = ref(false);
+const isRegisterModalOpen = ref(false);
+const isDropdownOpen = ref(false);
+const isDropdownOpenCart = ref(false);
+
+const closeLoginModal = () => {
+  isLoginModalOpen.value = false;
+};
+
+const closeRegisterModal = () => {
+  isRegisterModalOpen.value = false;
+  isLoginModalOpen.value = false;
+};
+
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const toggleDropdownCart = () => {
+  isDropdownOpenCart.value = !isDropdownOpenCart.value;
+};
 
 const logout = () => {
-  authStore.logoutUser()
-  isDropdownOpen.value = false
-  router.push('/')
-}
+  authStore.logoutUser();
+  isDropdownOpen.value = false;
+  router.push("/");
+};
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 const registerData = ref({
-  name: '',
-  username: '',
-  email: '',
-  password: '',
-  address: ''
-})
+  name: "",
+  username: "",
+  email: "",
+  password: "",
+  address: "",
+});
 
 const loginData = ref({
-  email: '',
-  password: ''
-})
+  email: "",
+  password: "",
+});
 
 const handleRegister = async () => {
-  const success = await authStore.registerUser(registerData.value)
+  const success = await authStore.registerUser(registerData.value);
   if (success) {
-    closeRegisterModal()
-    isLoginModalOpen.value = true 
+    closeRegisterModal();
+    isLoginModalOpen.value = true;
   }
-}
+};
 
 const handleLogin = async () => {
-  const success = await authStore.loginUser(loginData.value)
+  const success = await authStore.loginUser(loginData.value);
   if (success) {
-    closeLoginModal()
+    closeLoginModal();
   }
-}
-
+};
 </script>
 
 <template>
@@ -107,23 +115,35 @@ const handleLogin = async () => {
     </ul>
 
     <!-- Cart dengan counter -->
-     <div class="cart_menu">
+    <div class="cart_menu">
       <button @click="toggleDropdownCart">
         <i class="ri-shopping-cart-fill"></i>
         <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
       </button>
+
       <div v-if="isDropdownOpenCart" class="dropdown-menu-cart">
-        <div class="product">
-          <p>No. 1</p>
+        <div
+          v-if="
+            cartStore.cartItems.length &&
+            cartStore.cartItems[0].items.length === 0
+          "
+        >
+          Cart kosong
+        </div>
+        <div
+          v-else
+          v-for="(item, index) in cartStore.cartItems[0].items"
+          :key="index"
+          class="product"
+        >
+          <p>No. {{ index + 1 }}</p>
           <div class="pict"></div>
-          <p>Mills</p>
-          <p>Jumlah: </p>
+          <p>{{ item.product_id.nama_product }}</p>
+          <p>Jumlah: {{ item.quantity }}</p>
         </div>
         <RouterLink to="/cart" class="dropdown-item-cart">Check Out</RouterLink>
       </div>
-      
-     </div>
-   
+    </div>
 
     <!-- Account Icon -->
     <div class="navbar__account" v-if="authStore.isLoggedIn">
@@ -142,35 +162,79 @@ const handleLogin = async () => {
   </nav>
 
   <!-- login form -->
-  <div v-if="isLoginModalOpen" class="modal-overlay" @click.self="closeLoginModal">
+  <div
+    v-if="isLoginModalOpen"
+    class="modal-overlay"
+    @click.self="closeLoginModal"
+  >
     <div class="modal">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
-        <input type="text" placeholder="email" v-model="loginData.email" required />
-        <input type="password" placeholder="Password" v-model="loginData.password" required />
+        <input
+          type="text"
+          placeholder="email"
+          v-model="loginData.email"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          v-model="loginData.password"
+          required
+        />
         <button type="submit">Login</button>
       </form>
       <button class="close-btn" @click="closeLoginModal">X</button>
-      <button class="register" @click="isRegisterModalOpen = true">Register</button>
+      <button class="register" @click="isRegisterModalOpen = true">
+        Register
+      </button>
     </div>
   </div>
 
   <!-- //register form -->
-  <div v-if="isRegisterModalOpen" class="modal-overlay" @click.self="closeRegisterModal">
+  <div
+    v-if="isRegisterModalOpen"
+    class="modal-overlay"
+    @click.self="closeRegisterModal"
+  >
     <div class="modal">
       <h2>Login</h2>
       <form @submit.prevent="handleRegister">
-        <input type="text" placeholder="Name" v-model="registerData.name" required />
-        <input type="text" placeholder="Username" v-model="registerData.username" required />
-        <input type="text" placeholder="Email" v-model="registerData.email" required />
-        <input type="password" placeholder="Password"  v-model="registerData.password" required />
-        <input type="text" placeholder="Address" v-model="registerData.address" required />
+        <input
+          type="text"
+          placeholder="Name"
+          v-model="registerData.name"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Username"
+          v-model="registerData.username"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          v-model="registerData.email"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          v-model="registerData.password"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Address"
+          v-model="registerData.address"
+          required
+        />
         <button type="submit">Register</button>
       </form>
       <button class="close-btn" @click="closeRegisterModal">X</button>
     </div>
   </div>
-
 </template>
 
 <style scoped>
@@ -228,8 +292,6 @@ const handleLogin = async () => {
   width: auto;
 }
 
-
-
 /* Cart Styling */
 .cart_menu button {
   background: none;
@@ -239,13 +301,13 @@ const handleLogin = async () => {
   cursor: pointer;
 }
 
-.cart_menu button i{
+.cart_menu button i {
   font-size: 24px;
   color: white;
   text-decoration: none;
 }
 
-.dropdown-menu-cart{
+.dropdown-menu-cart {
   position: absolute;
   top: 40px;
   right: 0;
@@ -316,7 +378,6 @@ const handleLogin = async () => {
   border-radius: 5px;
 }
 
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -367,7 +428,6 @@ const handleLogin = async () => {
   cursor: pointer;
 }
 
-
 .dropdown-menu {
   position: absolute;
   top: 40px;
@@ -392,7 +452,7 @@ const handleLogin = async () => {
   border: none;
 }
 
-.dropdown-menu h1{
+.dropdown-menu h1 {
   color: black;
 }
 
@@ -403,5 +463,4 @@ const handleLogin = async () => {
 .logout-btn {
   color: red;
 }
-
 </style>
