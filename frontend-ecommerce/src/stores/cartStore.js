@@ -46,10 +46,32 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
+    const decrease = async (productID) => {
+        try {
+            const token = localStorage.getItem('token')
+            const response = await axios.post(
+                'http://localhost:9887/api/cart/decrease', 
+                { product_id: productID },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+                }
+            )
+            console.log('produk berhasil dikurangi')
+            await getProductByUser()
+
+        }catch(error){
+            console.log(error)
+        }
+
+    }
+
     return{
         cartItems,
         getProductByUser,
-        addToCart
+        addToCart,
+        decrease
     }
     
 })

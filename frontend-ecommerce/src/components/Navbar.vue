@@ -37,6 +37,14 @@ const cartCount = computed(() => {
   }, 0);
 });
 
+const buttonAddCart = (productId) => {
+  cartStore.addToCart(productId)
+}
+
+const buttonDecreaseCart = (productId) => {
+  cartStore.decrease(productId)
+}
+
 // State untuk jumlah item di cart
 
 const router = useRouter();
@@ -139,7 +147,7 @@ const handleLogin = async () => {
           <p>No. {{ index + 1 }}</p>
           <div class="pict"></div>
           <p>{{ item.product_id.nama_product }}</p>
-          <p>Jumlah: {{ item.quantity }}</p>
+          <button @click="buttonAddCart(item.product_id._id )">+</button><p>Jumlah: {{ item.quantity }}</p><button @click="buttonDecreaseCart(item.product_id._id )">-</button>
         </div>
         <RouterLink to="/cart" class="dropdown-item-cart">Check Out</RouterLink>
       </div>
