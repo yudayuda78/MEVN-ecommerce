@@ -29,11 +29,13 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
 
 app.use('/api/product', productRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/order', orderRoutes)
+app.use('/api/admin', adminRoutes)
 
 app.get('/', (req, res) => {
     res.send("Server berjalan...");
