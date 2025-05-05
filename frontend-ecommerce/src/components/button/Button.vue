@@ -3,7 +3,7 @@ defineOptions({ inheritAttrs: false })
 </script>
 
 <template>
-    <button :class="['default-button', $attrs.class]">
+    <button :class="['default-button', $attrs.class]" v-bind="$attrs">
       <slot />
     </button>
 </template>
