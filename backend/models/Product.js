@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const productSchema = new mongoose.Schema({
-    nama_produk: String,
+    nama_product: String,
     slug: String,
     kategori: String,
     jenis: String,
