@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import Product from "../models/Product.js"
 import { response } from "express"
+import {ObjectId} from 'mongodb'
 
 
 
@@ -26,6 +27,23 @@ export const addProduct = async(req, res) => {
             data: savedProduct,
         });
 
+    }catch(error){
+        console.error("Error adding product:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+}
+
+export const deleteProduct = async (req, res) =>{
+    try{
+        const {product_id} = req.body
+      
+        const product = await Product.findOne({_id : product_id})
+        await Product.deleteOne({ _id: product_id });
+
+        return res.status(200).json({
+            message: "Data produk berhasil dihapus",
+            data: product
+        });
     }catch(error){
         console.error("Error adding product:", error);
         return res.status(500).json({ message: "Server error" });
