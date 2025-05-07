@@ -5,6 +5,8 @@ import Sidebar from '../components/Sidebar.vue';
 import { useProductStore } from '@/stores/productStore';
 import Product from '../components/Product.vue';
 import { storeToRefs } from 'pinia';
+import Navbar from '../components/Navbar.vue'
+
 
 const route = useRoute();
 const productStore = useProductStore();
@@ -37,6 +39,8 @@ const prevPage = () => {
 </script>
 
 <template>
+  <Navbar />
+
   <div class="mainContainer">
     <Sidebar />
     <div class="content">

@@ -7,6 +7,8 @@ import Kid from '@/views/Kid.vue'
 import Other from '@/views/Other.vue'
 import Cart from '@/views/Cart.vue'
 import DetailProduct from '@/views/DetailProduct.vue'
+import LoginAdmin from '@/views/LoginAdmin.vue'
+import Admin from '@/views/Admin.vue'
 
 import { useAuthStore } from '@/stores/authStore'
 
@@ -18,7 +20,9 @@ const routes = [
     { path: '/kid', name: 'Kid', component: Kid},
     { path: '/other', name: 'Other', component: Other},
     { path: '/cart', name: 'Cart', component: Cart},
-    {path: '/product/:id', name:'DetailProduct', component: DetailProduct, prop:true}
+    {path: '/product/:id', name:'DetailProduct', component: DetailProduct, prop:true},
+    { path: '/admin', name:'Admin', component: Admin},
+    { path: '/loginadmin', name:'LoginAdmin', component: LoginAdmin}
     
 ]
 
