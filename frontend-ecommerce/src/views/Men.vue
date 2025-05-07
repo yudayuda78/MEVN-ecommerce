@@ -39,7 +39,7 @@ const prevPage = () => {
 </script>
 
 <template>
-  <Navbar />
+  <Navbar></Navbar>
 
   <div class="mainContainer">
     <Sidebar />

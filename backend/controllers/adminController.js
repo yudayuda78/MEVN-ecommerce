@@ -59,6 +59,20 @@ export const getAdmin = async (req, res)=> {
     return res.status(400).json({message: "admin tidak ada"})
 }
 
+export const getProduct = async(req, res) => {
+    try{
+        const product =  await Product.find()
+        res.status(202).json({
+            message: "Produk berhasil didapatkan",
+            data: product,
+        });
+
+    }catch(error){
+        console.error("Error get product", error);
+        return res.status(500).json({ message: "Server error" });
+    }
+}
+
 export const addProduct = async(req, res) => {
     try{
         const { nama_product, harga, image, jenis, jumlah, kategori, color} = req.body

@@ -9,6 +9,11 @@ import Cart from '@/views/Cart.vue'
 import DetailProduct from '@/views/DetailProduct.vue'
 import LoginAdmin from '@/views/LoginAdmin.vue'
 import Admin from '@/views/Admin.vue'
+import Product from '@/views/admin/product.vue'
+import Order from '@/views/admin/order.vue'
+import Appearance from '@/views/admin/appearance.vue'
+import Setting from '@/views/admin/Setting.vue'
+import Dashboard from '@/views/admin/Dashboard.vue'
 
 import { useAuthStore } from '@/stores/authStore'
 
@@ -20,8 +25,17 @@ const routes = [
     { path: '/kid', name: 'Kid', component: Kid},
     { path: '/other', name: 'Other', component: Other},
     { path: '/cart', name: 'Cart', component: Cart},
-    {path: '/product/:id', name:'DetailProduct', component: DetailProduct, prop:true},
-    { path: '/admin', name:'Admin', component: Admin},
+    { path: '/product/:id', name:'DetailProduct', component: DetailProduct, prop:true},
+    { path: '/admin', 
+      name:'Admin', 
+      component: Admin, 
+      children:[
+        { path: 'dashboard', name:'Dashboard', component:Dashboard},
+        { path: 'product', name:'Product', component: Product},
+        { path: 'order', name:'Order', component: Order},
+        { path: 'appearance', name:'Appeareance', component: Appearance},
+        { path: 'setting', name:'Setting', component: Setting}
+    ]},
     { path: '/loginadmin', name:'LoginAdmin', component: LoginAdmin}
     
 ]
