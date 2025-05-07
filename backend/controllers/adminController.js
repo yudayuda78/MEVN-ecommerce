@@ -47,6 +47,18 @@ export const loginAdmin = async(req, res)=> {
     }
 }
 
+export const getAdmin = async (req, res)=> {
+    
+    const admin = await Admin.findById(req.admin.id).select("-password")
+    if(admin){
+        return res.status(200).json({
+            admin
+        })
+    }
+
+    return res.status(400).json({message: "admin tidak ada"})
+}
+
 export const addProduct = async(req, res) => {
     try{
         const { nama_product, harga, image, jenis, jumlah, kategori, color} = req.body

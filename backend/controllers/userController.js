@@ -69,13 +69,13 @@ export const login = async (req, res) => {
 export const getUser = async (req, res) =>{
     const user = await User.findById(req.user.id).select("-password")
 
-    if(user){
-        return res.status(200).json({
-            user
-        })
-    }
+        if(user){
+            return res.status(200).json({
+                user
+            })
+        }
 
-    return res.status(400).json({message: "user tidak ada"})
+        return res.status(400).json({message: "user tidak ada"})
    
 }
 
