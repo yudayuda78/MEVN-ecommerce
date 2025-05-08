@@ -19,6 +19,8 @@
     onMounted(() => {
         productStore.fetchProducts();
     })
+
+    
 </script>
 
 <style scoped>

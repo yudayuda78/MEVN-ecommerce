@@ -33,8 +33,9 @@ export const useProductStore = defineStore('product', () => {
 
       const queryString = queryParams.length ? `?${queryParams.join("&")}` : "";
       
-      console.log("🔍 Fetching data from:", `http://localhost:9887/api/product${queryString}`);
+      // console.log("🔍 Fetching data from:", `http://localhost:9887/api/product${queryString}`);
       const response = await axios.get(`http://localhost:9887/api/product${queryString}`);
+      // console.log(response)
 
       productData.value = response.data.data;
       currentPage.value = response.data.current_page;
