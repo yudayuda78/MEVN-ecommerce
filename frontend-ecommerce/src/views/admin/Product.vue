@@ -14,15 +14,23 @@ const handleEdit = (product) => {
   alert(`Edit produk: ${product.nama_product}`);
   // Nanti bisa diarahkan ke halaman edit atau tampilkan modal
 };
-const showModal = ref(false)
-const showModalEdit = ref(false)
+const showModal = ref(false);
+const showModalEdit = ref(false);
 const modalProduct = () => {
   showModal.value = !showModal.value;
 };
 
-const modalEditProduct = () => {
-   showModalEdit.value = !showModalEdit.value
-}
+const modalEditProduct = (product) => {
+  formEditProduct.nama_product = product.nama_product;
+  formEditProduct.harga = product.harga;
+  formEditProduct.jumlah = product.jumlah;
+  formEditProduct.jenis = product.jenis;
+  formEditProduct.kategori = product.kategori;
+  formEditProduct.color = product.color;
+  formEditProduct.slug = product.slug;
+
+  showModalEdit.value = !showModalEdit.value;
+};
 
 const addProduct = () => {
   console.log(JSON.stringify(formAddProduct));
@@ -102,9 +110,9 @@ const formEditProduct = reactive({
   </div>
 
   <div v-if="showModalEdit" class="modal-edit-wrapper">
-   <div class="overlay" @click="showModalEdit = false">
+    <div class="overlay" @click="showModalEdit = false">
       <div class="modal-box modal-edit-product" @click.stop>
-         <a href="">
+        <a href="">
           <img src="" alt="gambar" />
         </a>
         <div class="input">
@@ -144,8 +152,7 @@ const formEditProduct = reactive({
 
         <Button @click="editProduct">Edit</Button>
       </div>
-   </div>
-
+    </div>
   </div>
 
   <table class="produk-table">
@@ -165,13 +172,13 @@ const formEditProduct = reactive({
       <tr v-for="product in productStore.productData" :key="product._id">
         <td><img :src="product.image" alt="Gambar" class="img-produk" /></td>
         <td>{{ product.nama_product }}</td>
-        <td>Rp{{ product.harga.toLocaleString('id-ID') }}</td>
+        <td>Rp{{ product.harga.toLocaleString("id-ID") }}</td>
         <td>{{ product.jumlah }}</td>
         <td>{{ product.jenis }}</td>
         <td>{{ product.kategori }}</td>
         <td>{{ product.color }}</td>
         <td>
-          <button class="btn-edit" @click="modalEditProduct">Edit</button>
+          <button class="btn-edit" @click="modalEditProduct(product)">Edit</button>
         </td>
       </tr>
     </tbody>
@@ -179,7 +186,6 @@ const formEditProduct = reactive({
 </template>
 
 <style scoped>
-
 .modal-wrapper {
   position: fixed;
   top: 0;
@@ -214,8 +220,6 @@ const formEditProduct = reactive({
   font-family: sans-serif;
 }
 
-
-
 .modal-add-product a {
   display: block;
   text-align: center;
@@ -229,8 +233,6 @@ const formEditProduct = reactive({
   border-radius: 8px;
   background-color: #f0f0f0;
 }
-
-
 
 .input {
   margin-bottom: 16px;
