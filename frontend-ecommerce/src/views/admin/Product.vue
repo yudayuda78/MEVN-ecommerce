@@ -14,16 +14,31 @@ const handleEdit = (product) => {
   alert(`Edit produk: ${product.nama_product}`);
   // Nanti bisa diarahkan ke halaman edit atau tampilkan modal
 };
-const showModal = ref(false);
+const showModal = ref(false)
+const showModalEdit = ref(false)
 const modalProduct = () => {
   showModal.value = !showModal.value;
 };
+
+const modalEditProduct = () => {
+   showModalEdit.value = !showModalEdit.value
+}
 
 const addProduct = () => {
   console.log(JSON.stringify(formAddProduct));
 };
 
 const formAddProduct = reactive({
+  nama_product: "",
+  harga: 0,
+  jumlah: 0,
+  jenis: "",
+  kategori: "",
+  color: "",
+  slug: "",
+});
+
+const formEditProduct = reactive({
   nama_product: "",
   harga: 0,
   jumlah: 0,
@@ -42,7 +57,7 @@ const formAddProduct = reactive({
 
   <div v-if="showModal" class="modal-wrapper">
     <div class="overlay" @click="showModal = false">
-      <div class="modal-add-product">
+      <div class="modal-box modal-add-product" @click.stop>
         <a href="">
           <img src="" alt="gambar" />
         </a>
@@ -86,6 +101,53 @@ const formAddProduct = reactive({
     </div>
   </div>
 
+  <div v-if="showModalEdit" class="modal-edit-wrapper">
+   <div class="overlay" @click="showModalEdit = false">
+      <div class="modal-box modal-edit-product" @click.stop>
+         <a href="">
+          <img src="" alt="gambar" />
+        </a>
+        <div class="input">
+          <label for="">nama product</label>
+          <input type="text" v-model="formEditProduct.nama_product" />
+        </div>
+
+        <div class="input">
+          <label for="">harga</label>
+          <input type="number" v-model="formEditProduct.harga" />
+        </div>
+
+        <div class="input">
+          <label for="">jenis</label>
+          <input type="text" v-model="formEditProduct.jenis" />
+        </div>
+
+        <div class="input">
+          <label for="">jumlah</label>
+          <input type="number" v-model="formEditProduct.jumlah" />
+        </div>
+
+        <div class="input">
+          <label for="">kategori</label>
+          <input type="text" v-model="formEditProduct.kategori" />
+        </div>
+
+        <div class="input">
+          <label for="">color</label>
+          <input type="text" v-model="formEditProduct.color" />
+        </div>
+
+        <div class="input">
+          <label for="">slug</label>
+          <input type="text" v-model="formEditProduct.slug" />
+        </div>
+
+        <Button @click="editProduct">Edit</Button>
+      </div>
+   </div>
+
+  </div>
+
   <table class="produk-table">
     <thead>
       <tr>
@@ -109,7 +171,7 @@ const formAddProduct = reactive({
         <td>{{ product.kategori }}</td>
         <td>{{ product.color }}</td>
         <td>
-          <button class="btn-edit" @click="handleEdit(product)">Edit</button>
+          <button class="btn-edit" @click="modalEditProduct">Edit</button>
         </td>
       </tr>
     </tbody>
@@ -136,7 +198,7 @@ const formAddProduct = reactive({
   background-color: rgba(0, 0, 0, 0.5); /* Gelap transparan */
   z-index: 1;
 }
-.modal-add-product {
+.modal-box {
   position: absolute;
   top: 45%;
   left: 50%;
@@ -152,6 +214,8 @@ const formAddProduct = reactive({
   font-family: sans-serif;
 }
 
+
+
 .modal-add-product a {
   display: block;
   text-align: center;
@@ -165,6 +229,8 @@ const formAddProduct = reactive({
   border-radius: 8px;
   background-color: #f0f0f0;
 }
+
+
 
 .input {
   margin-bottom: 16px;
