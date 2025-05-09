@@ -68,7 +68,9 @@ const addProduct = async () => {
   try {
     await axios.post("http://localhost:9887/api/admin/addProduct", formData);
     showModal.value = false;
+    
     await productStore.fetchProducts();
+    alert("Product ditambahkan");
   } catch (error) {
     console.error("Gagal menambahkan produk", error);
     alert("Gagal menambahkan produk.");
