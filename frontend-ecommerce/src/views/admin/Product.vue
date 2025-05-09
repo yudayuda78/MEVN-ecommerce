@@ -2,39 +2,13 @@
 import { useProductStore } from "@/stores/productStore";
 import { onMounted, reactive, watch, ref } from "vue";
 import Button from "@/components/button/Button.vue";
+import axios from "axios";
 
 const productStore = useProductStore();
 
 onMounted(async () => {
   await productStore.fetchProducts();
 });
-
-// Fungsi sementara untuk tombol Edit
-const handleEdit = (product) => {
-  alert(`Edit produk: ${product.nama_product}`);
-  // Nanti bisa diarahkan ke halaman edit atau tampilkan modal
-};
-const showModal = ref(false);
-const showModalEdit = ref(false);
-const modalProduct = () => {
-  showModal.value = !showModal.value;
-};
-
-const modalEditProduct = (product) => {
-  formEditProduct.nama_product = product.nama_product;
-  formEditProduct.harga = product.harga;
-  formEditProduct.jumlah = product.jumlah;
-  formEditProduct.jenis = product.jenis;
-  formEditProduct.kategori = product.kategori;
-  formEditProduct.color = product.color;
-  formEditProduct.slug = product.slug;
-
-  showModalEdit.value = !showModalEdit.value;
-};
-
-const addProduct = () => {
-  console.log(JSON.stringify(formAddProduct));
-};
 
 const formAddProduct = reactive({
   nama_product: "",
@@ -55,6 +29,51 @@ const formEditProduct = reactive({
   color: "",
   slug: "",
 });
+
+const image = ref([]);
+
+const showModal = ref(false);
+const showModalEdit = ref(false);
+const modalProduct = () => {
+  showModal.value = !showModal.value;
+};
+
+const modalEditProduct = (product) => {
+  formEditProduct.nama_product = product.nama_product;
+  formEditProduct.harga = product.harga;
+  formEditProduct.jumlah = product.jumlah;
+  formEditProduct.jenis = product.jenis;
+  formEditProduct.kategori = product.kategori;
+  formEditProduct.color = product.color;
+  formEditProduct.slug = product.slug;
+
+  showModalEdit.value = !showModalEdit.value;
+};
+
+const imageUpload = (event) => {
+  image.value = Array.from(event.target.files);
+};
+
+const addProduct = async () => {
+  const formData = new FormData();
+  console.log(formData);
+  for (const key in formAddProduct) {
+    formData.append(key, formAddProduct[key]);
+  }
+
+  image.value.forEach((imgFile, index) => {
+    formData.append("image[]", imgFile);
+  });
+
+  try {
+    await axios.post("http://localhost:9887/api/admin/addProduct", formData);
+    showModal.value = false;
+    await productStore.fetchProducts();
+  } catch (error) {
+    console.error("Gagal menambahkan produk", error);
+    alert("Gagal menambahkan produk.");
+  }
+};
 </script>
 
 <template>
@@ -66,9 +85,10 @@ const formEditProduct = reactive({
   <div v-if="showModal" class="modal-wrapper">
     <div class="overlay" @click="showModal = false">
       <div class="modal-box modal-add-product" @click.stop>
-        <a href="">
-          <img src="" alt="gambar" />
-        </a>
+        <div class="input">
+          <label for="upload-file">Upload Image</label>
+          <input id="upload-file" type="file" multiple @change="imageUpload" />
+        </div>
         <div class="input">
           <label for="">nama product</label>
           <input type="text" v-model="formAddProduct.nama_product" />
@@ -178,7 +198,9 @@ const formEditProduct = reactive({
         <td>{{ product.kategori }}</td>
         <td>{{ product.color }}</td>
         <td>
-          <button class="btn-edit" @click="modalEditProduct(product)">Edit</button>
+          <button class="btn-edit" @click="modalEditProduct(product)">
+            Edit
+          </button>
         </td>
       </tr>
     </tbody>

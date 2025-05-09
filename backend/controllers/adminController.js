@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import { response } from "express"
 import {ObjectId} from 'mongodb'
 
+
 export const addAdmin = async(req, res) => {
     try{
         const {username, password} = req.body
@@ -75,8 +76,11 @@ export const getProduct = async(req, res) => {
 
 export const addProduct = async(req, res) => {
     try{
-        const { nama_product, harga, image, jenis, jumlah, kategori, color} = req.body
+        const { nama_product, harga, jenis, jumlah, kategori, color} = req.body
         const slug = nama_product.split(' ').join('-')
+        const image = req.files?.[0]?.filename
+        ? `/public/${req.files[0].filename}`
+        : '';
         const newData = Product({
             nama_product: nama_product,
             harga: harga, 
