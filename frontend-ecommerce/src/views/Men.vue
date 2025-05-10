@@ -65,6 +65,7 @@ const prevPage = () => {
 .content {
   flex: 1;
   padding: 20px;
+  margin-top: 100px;
 }
 
 .pagination {
