@@ -79,7 +79,7 @@ export const addProduct = async(req, res) => {
         const { nama_product, harga, jenis, jumlah, kategori, color} = req.body
         const slug = nama_product.split(' ').join('-')
         const image = req.files?.[0]?.filename
-        ? `/public/${req.files[0].filename}`
+        ? `${req.files[0].filename}`
         : '';
         const newData = Product({
             nama_product: nama_product,
