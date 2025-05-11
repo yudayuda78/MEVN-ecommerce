@@ -19,7 +19,7 @@ export const useCartStore = defineStore('cart', () => {
             )
 
             cartItems.value = response.data // ← simpan hasil ke state
-            console.log('Cart Items:', JSON.stringify(cartItems.value, null, 2));
+            // console.log('Cart Items:', JSON.stringify(cartItems.value, null, 2));
         }catch(error){
             console.log(error)
         }

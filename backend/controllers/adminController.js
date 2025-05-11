@@ -92,6 +92,8 @@ export const addProduct = async(req, res) => {
             color: color,
         })
 
+        console.log(newData)
+
         const savedProduct = await newData.save()
 
         res.status(201).json({

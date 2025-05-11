@@ -134,8 +134,8 @@ const applyFilter = () => {
 
 <style scoped>
 .sidebar {
-  position: fixed;
-  left: 0;
+  /* position: fixed;
+  left: 0; */
   top: 60px;
   width: 20%;
   height: calc(100vh - 60px);
@@ -143,7 +143,7 @@ const applyFilter = () => {
   background: #f9f9f9;
   border-right: 1px solid #ddd;
   overflow-y: auto;
-  z-index: 1000;
+  
 }
 
 .category {
@@ -184,8 +184,8 @@ li {
 .range-slider input[type="range"] {
   position: absolute;
   width: 100%;
-  appearance: none; /* Standar */
-  -webkit-appearance: none; /* Safari & Chrome */
+  appearance: none; 
+  -webkit-appearance: none;
   -moz-appearance: none; 
   background: transparent;
   pointer-events: none;

@@ -25,12 +25,7 @@
 
 <style scoped>
 .container {
-  display: flex;
-  width: 82%;
-  flex-direction: column;
-  margin-left: 270px;
-  padding-top: 60px;
-  background-color: blanchedalmond;
+
 }
 
 .cardContainer {
@@ -40,7 +35,7 @@
   grid-template-columns: repeat(
     auto-fill,
     minmax(250px, 1fr)
-  ); /* Minimal 250px */
+  );
   gap: 20px;
   padding: 20px;
   justify-content: center;

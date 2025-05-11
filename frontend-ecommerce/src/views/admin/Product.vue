@@ -192,8 +192,8 @@ const addProduct = async () => {
     </thead>
     <tbody>
       <tr v-for="product in productStore.productData" :key="product._id">
-        <td><img :src="product.image" alt="Gambar" class="img-produk" /></td>
-        <td>{{ product.nama_product }}</td>
+        <td><img :src="`localhost:9887/${product.image}`" alt="Gambar" class="img-produk" /></td>
+        <td>{{ product.nama_product }}/{{ product.image }}</td>
         <td>Rp{{ product.harga.toLocaleString("id-ID") }}</td>
         <td>{{ product.jumlah }}</td>
         <td>{{ product.jenis }}</td>
