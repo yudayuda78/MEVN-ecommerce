@@ -28,12 +28,14 @@ const formEditProduct = reactive({
   kategori: "",
   color: "",
   slug: "",
-});
+})
+const product_id = ref()
 
 const image = ref([]);
 
 const showModal = ref(false);
 const showModalEdit = ref(false);
+const showModalDelete = ref(false);
 const modalProduct = () => {
   showModal.value = !showModal.value;
 };
@@ -50,13 +52,26 @@ const modalEditProduct = (product) => {
   showModalEdit.value = !showModalEdit.value;
 };
 
+
+
+const modalDeleteProduct = (id) => {
+  product_id.value = id
+  showModalDelete.value = !showModalDelete.value;
+};
+
+const deleteProduct= async() => {
+  productStore.deleteProduct(product_id.value)
+  await productStore.fetchProducts();
+  showModalDelete.value = false
+  
+}
+
 const imageUpload = (event) => {
   image.value = Array.from(event.target.files);
 };
 
 const addProduct = async () => {
   const formData = new FormData();
-  console.log(formData);
   for (const key in formAddProduct) {
     formData.append(key, formAddProduct[key]);
   }
@@ -68,7 +83,7 @@ const addProduct = async () => {
   try {
     await axios.post("http://localhost:9887/api/admin/addProduct", formData);
     showModal.value = false;
-    
+
     await productStore.fetchProducts();
     alert("Product ditambahkan");
   } catch (error) {
@@ -177,6 +192,18 @@ const addProduct = async () => {
     </div>
   </div>
 
+  <div v-if="showModalDelete" class="modal-edit-wrapper">
+    <div class="overlay" @click="showModalDelete = false">
+      <div class="modal-box modal-delete-product" @click.stop>
+        <p>Apakah yakin akan menghapus produk?</p>
+        <div class="button-detele-wrapper">
+          <Button @click="showModalDelete = false">Batal</Button>
+          <Button @click="deleteProduct">Hapus</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <table class="produk-table">
     <thead>
       <tr>
@@ -192,7 +219,13 @@ const addProduct = async () => {
     </thead>
     <tbody>
       <tr v-for="product in productStore.productData" :key="product._id">
-        <td><img :src="`http://localhost:9887/${product.image}`" alt="Gambar" class="img-produk" /></td>
+        <td>
+          <img
+            :src="`http://localhost:9887/${product.image}`"
+            alt="Gambar"
+            class="img-produk"
+          />
+        </td>
         <td>{{ product.nama_product }}</td>
         <td>Rp{{ product.harga.toLocaleString("id-ID") }}</td>
         <td>{{ product.jumlah }}</td>
@@ -200,9 +233,12 @@ const addProduct = async () => {
         <td>{{ product.kategori }}</td>
         <td>{{ product.color }}</td>
         <td>
-          <button class="btn-edit" @click="modalEditProduct(product)">
+          <Button class="btn-edit" @click="modalEditProduct(product)">
             Edit
-          </button>
+          </Button>
+          <Button class="btn-hapus" @click="modalDeleteProduct(product._id)"
+            >Hapus</Button
+          >
         </td>
       </tr>
     </tbody>
@@ -317,7 +353,20 @@ const addProduct = async () => {
   cursor: pointer;
 }
 
+.btn-hapus {
+  padding: 4px 8px;
+  background-color: #cf3b16;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .btn-edit:hover {
   background-color: #45a049;
+}
+
+.btn-hapus:hover {
+  background-color: #9b341a;
 }
 </style>

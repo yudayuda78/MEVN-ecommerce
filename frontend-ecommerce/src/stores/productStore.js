@@ -35,7 +35,7 @@ export const useProductStore = defineStore('product', () => {
       
       // console.log("🔍 Fetching data from:", `http://localhost:9887/api/product${queryString}`);
       const response = await axios.get(`http://localhost:9887/api/product${queryString}`);
-      console.log(response)
+      
 
       productData.value = response.data.data;
       currentPage.value = response.data.current_page;
@@ -55,6 +55,15 @@ export const useProductStore = defineStore('product', () => {
     }
   };
 
+  const deleteProduct = async(id) =>{
+    try{
+      await axios.post('http://localhost:9887/api/admin/deleteProduct', { product_id: id })
+      console.log('data terhapus')
+    }catch(error){
+      console.error("Gagal mengambil hapus produk:", error)
+    }
+  }
+
   return {
     productData,
     detailProductData,
@@ -63,5 +72,6 @@ export const useProductStore = defineStore('product', () => {
     currentPage,
     lastPage,
     detailProduct,
+    deleteProduct
   };
 });
