@@ -1,5 +1,5 @@
 import express from 'express'
-import { addAdmin,loginAdmin, getAdmin, getProduct, addProduct, deleteProduct, increaseProduct, decreaseProduct } from '../controllers/adminController.js'
+import { addAdmin,loginAdmin, getAdmin, getProduct, addProduct, deleteProduct, increaseProduct, decreaseProduct, editProduct} from '../controllers/adminController.js'
 import { adminMiddleware } from '../middleware/adminMiddleware.js'
 import { uploadImages } from '../middleware/uploadMiddleware.js'
 
@@ -13,5 +13,6 @@ router.post('/addProduct', uploadImages, addProduct)
 router.post('/deleteProduct', deleteProduct)
 router.patch('/increaseProduct', increaseProduct )
 router.patch('/decreaseProduct', decreaseProduct)
+router.patch('/editProduct', editProduct)
 
 export default router

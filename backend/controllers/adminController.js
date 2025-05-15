@@ -164,11 +164,40 @@ export const decreaseProduct = async(req, res) => {
 
 export const editProduct = async(req, res) =>{
     try{
-        const {product_id}  = req.body
-        const product = await Product.findOne({_id: product_id})
-        if (!product) {
+        const {product_id, nama_product, harga, jenis, jumlah, kategori, color}  = req.body
+        const slug = nama_product.split(' ').join('-')
+        const image = req.files?.[0]?.filename? `${req.files[0].filename}`: ''
+
+        const newData = {
+            nama_product: nama_product,
+            harga: harga, 
+            image: image,
+            jenis: jenis,
+            jumlah: jumlah,
+            kategori: kategori,
+            slug: slug,
+            color: color,
+        }
+
+        if(image){
+            newData.image = image
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            product_id,
+            newData,
+            { new: true } 
+          );
+        
+        if (!updatedProduct) {
             return res.status(404).json({ message: "Produk tidak ditemukan" });
         }
+      
+        res.status(200).json({
+            message: "Produk berhasil diupdate",
+            data: updatedProduct,
+        });
+        
     }catch(error){
         console.error("Error increase product:", error);
         return res.status(500).json({ message: "Server error" });
