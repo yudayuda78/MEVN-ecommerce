@@ -176,8 +176,15 @@ export const decreaseProduct = async(req, res) => {
 export const editProduct = async(req, res) =>{
     try{
         const {product_id, nama_product, harga, jenis, jumlah, kategori, color}  = req.body
+        console.log(nama_product)
         const slug = nama_product.split(' ').join('-')
-        const image = req.files?.[0]?.filename? `${req.files[0].filename}`: ''
+
+        const existingProduct = await Product.findById(product_id)
+        if (!existingProduct) {
+            return res.status(404).json({ message: "Produk tidak ditemukan" })
+        }
+
+        const image = req.files?.[0]?.filename || existingProduct.image;
 
         const newData = {
             nama_product: nama_product,

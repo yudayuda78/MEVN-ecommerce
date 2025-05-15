@@ -51,6 +51,8 @@ const modalEditProduct = (product) => {
   formEditProduct.slug = product.slug
   formEditProduct.image = product.image
 
+  product_id.value = product._id 
+
   showModalEdit.value = !showModalEdit.value;
 };
 
@@ -96,7 +98,40 @@ const addProduct = async () => {
     console.error("Gagal menambahkan produk", error);
     alert("Gagal menambahkan produk.");
   }
-};
+}
+
+const editProduct = async () => {
+  const formData = new FormData();
+
+  // Tambahkan data input text
+  for (const key in formEditProduct) {
+    if (key !== "image") { // image akan ditambahkan terpisah
+      formData.append(key, formEditProduct[key]);
+    }
+  }
+
+  // Cek apakah user mengupload gambar baru
+  if (image.value.length > 0) {
+    image.value.forEach((imgFile) => {
+      formData.append("image[]", imgFile); // sesuai dengan backend
+    });
+  }
+
+
+  formData.append("product_id", product_id.value)
+ 
+
+  try {
+    await axios.patch("http://localhost:9887/api/admin/editProduct", formData);
+    showModalEdit.value = false;
+
+    await productStore.fetchProducts();
+    alert("Product berhasil diedit")
+  } catch (error) {
+    console.error("Gagal edit produk", error)
+    alert("Gagal mengedit produk.")
+  }
+}
 </script>
 
 <template>

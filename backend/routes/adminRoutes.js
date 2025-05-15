@@ -13,6 +13,6 @@ router.post('/addProduct', uploadImages, addProduct)
 router.post('/deleteProduct', deleteProduct)
 router.patch('/increaseProduct', increaseProduct )
 router.patch('/decreaseProduct', decreaseProduct)
-router.patch('/editProduct', editProduct)
+router.patch('/editProduct', uploadImages,editProduct)
 
 export default router
