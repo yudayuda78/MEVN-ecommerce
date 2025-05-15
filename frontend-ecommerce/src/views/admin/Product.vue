@@ -28,6 +28,7 @@ const formEditProduct = reactive({
   kategori: "",
   color: "",
   slug: "",
+  image: ""
 })
 const product_id = ref()
 
@@ -41,13 +42,14 @@ const modalProduct = () => {
 };
 
 const modalEditProduct = (product) => {
-  formEditProduct.nama_product = product.nama_product;
-  formEditProduct.harga = product.harga;
-  formEditProduct.jumlah = product.jumlah;
-  formEditProduct.jenis = product.jenis;
-  formEditProduct.kategori = product.kategori;
-  formEditProduct.color = product.color;
-  formEditProduct.slug = product.slug;
+  formEditProduct.nama_product = product.nama_product
+  formEditProduct.harga = product.harga
+  formEditProduct.jumlah = product.jumlah
+  formEditProduct.jenis = product.jenis
+  formEditProduct.kategori = product.kategori
+  formEditProduct.color = product.color
+  formEditProduct.slug = product.slug
+  formEditProduct.image = product.image
 
   showModalEdit.value = !showModalEdit.value;
 };
@@ -60,15 +62,19 @@ const modalDeleteProduct = (id) => {
 };
 
 const deleteProduct= async() => {
-  productStore.deleteProduct(product_id.value)
+  await productStore.deleteProduct(product_id.value)
   await productStore.fetchProducts();
   showModalDelete.value = false
   
 }
 
 const imageUpload = (event) => {
-  image.value = Array.from(event.target.files);
-};
+  image.value = Array.from(event.target.files)
+
+  if (image.value.length > 0) {
+    formEditProduct.image = ""
+  }
+}
 
 const addProduct = async () => {
   const formData = new FormData();
@@ -149,9 +155,15 @@ const addProduct = async () => {
   <div v-if="showModalEdit" class="modal-edit-wrapper">
     <div class="overlay" @click="showModalEdit = false">
       <div class="modal-box modal-edit-product" @click.stop>
-        <a href="">
-          <img src="" alt="gambar" />
-        </a>
+        <div class="input">
+          <img
+            :src="`http://localhost:9887/${formEditProduct.image}`"
+            alt="Gambar"
+            class="img-produk"
+          />
+          <label for="upload-file">Upload Image</label>
+          <input id="upload-file" type="file" multiple @change="imageUpload" />
+        </div>
         <div class="input">
           <label for="">nama product</label>
           <input type="text" v-model="formEditProduct.nama_product" />

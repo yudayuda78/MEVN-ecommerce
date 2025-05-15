@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { response } from "express"
 import {ObjectId} from 'mongodb'
+import fs from "fs"
+import path from "path"
 
 
 export const addAdmin = async(req, res) => {
@@ -112,6 +114,15 @@ export const deleteProduct = async (req, res) =>{
         const {product_id} = req.body
       
         const product = await Product.findOne({_id : product_id})
+
+
+        if(product.image){
+            const imagePath = path.resolve(`./public/${product.image}`)
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath)
+            }else{console.log(`${imagePath} tidak ada`)}
+        }
+
         await Product.deleteOne({ _id: product_id });
 
         return res.status(200).json({
