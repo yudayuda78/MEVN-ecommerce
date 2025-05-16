@@ -66,7 +66,7 @@ const prevPage = () => {
   display: flex;
   height: calc(100vh - 60px);
   width: 100%;
-  background-color: salmon;
+  /* background-color: salmon; */
   
   margin-top: 60px;
 }
@@ -76,7 +76,7 @@ const prevPage = () => {
   padding: 20px;
   width: 80%;
   height: calc(100vh - 60px);
-  background-color: aqua;
+  /* background-color: aqua; */
   overflow: auto;
 }
 

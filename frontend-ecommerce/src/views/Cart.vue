@@ -31,6 +31,7 @@ const decreaseQuantity = async (productID) => {
 };
 
 const totalCost = ref;
+
 </script>
 
 <template>
@@ -44,7 +45,9 @@ const totalCost = ref;
         <p class="cart-number">No. {{ index + 1 }}</p>
 
         <div class="cart-content">
-          <div class="cart-image"></div>
+          <div class="cart-image">
+            <img :src="`http://localhost:9887/${item.product_id.image}`" alt="Gambar" class="cart-image"> 
+          </div>
           <div class="cart-info">
             <p class="product-name">{{ item.product_id?.nama_product }}</p>
             <p class="product-price">{{ item.product_id?.harga }}</p>

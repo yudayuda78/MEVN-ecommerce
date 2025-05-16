@@ -24,13 +24,11 @@
 </script>
 
 <style scoped>
-.container {
 
-}
 
 .cardContainer {
   width: 100%;
-  background-color: aqua;
+  /* background-color: aqua; */
   display: grid;
   grid-template-columns: repeat(
     auto-fill,

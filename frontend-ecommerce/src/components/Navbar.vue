@@ -38,12 +38,12 @@ const cartCount = computed(() => {
 });
 
 const buttonAddCart = (productId) => {
-  cartStore.addToCart(productId)
-}
+  cartStore.addToCart(productId);
+};
 
 const buttonDecreaseCart = (productId) => {
-  cartStore.decrease(productId)
-}
+  cartStore.decrease(productId);
+};
 
 // State untuk jumlah item di cart
 
@@ -144,10 +144,22 @@ const handleLogin = async () => {
           :key="index"
           class="product"
         >
-          <p>No. {{ index + 1 }}</p>
-          <div class="pict"></div>
-          <p>{{ item.product_id.nama_product }}</p>
-          <button @click="buttonAddCart(item.product_id._id )">+</button><p>Jumlah: {{ item.quantity }}</p><button @click="buttonDecreaseCart(item.product_id._id )">-</button>
+          <div
+            class="pict"
+            :style="{
+              backgroundImage: `url('http://localhost:9887/${item.product_id.image}')`,
+            }"
+          ></div>
+          <div>
+            <p>{{ item.product_id.nama_product }}</p>
+            <div class="quantity-controls">
+              <button @click="buttonDecreaseCart(item.product_id._id)">
+                -
+              </button>
+              <span>{{ item.quantity }}</span>
+              <button @click="buttonAddCart(item.product_id._id)">+</button>
+            </div>
+          </div>
         </div>
         <RouterLink to="/cart" class="dropdown-item-cart">Check Out</RouterLink>
       </div>
@@ -470,5 +482,81 @@ const handleLogin = async () => {
 
 .logout-btn {
   color: red;
+}
+
+/* cart menu  */
+.dropdown-menu-cart {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.product {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 12px;
+}
+
+.product .pict {
+  width: 60px;
+  height: 60px;
+  background-color: #f3f3f3;
+  border-radius: 8px;
+  background-image: url("/path/to/default-product.jpg"); /* Ganti dengan product.image jika ada */
+  background-size: cover;
+  background-position: center;
+}
+
+.product p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.product .quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.quantity-controls button {
+  background-color: black;
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dropdown-item-cart {
+  display: block;
+  margin-top: 12px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.dropdown-item-cart:hover {
+  background-color: #222;
 }
 </style>

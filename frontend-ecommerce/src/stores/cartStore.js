@@ -5,7 +5,7 @@ import axios from "axios"
 export const useCartStore = defineStore('cart', () => {
     const cartItems = ref([])
     
-
+    
     const getProductByUser = async () => {
         try{
             const token = localStorage.getItem('token')
