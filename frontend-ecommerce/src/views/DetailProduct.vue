@@ -3,6 +3,8 @@ import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useProductStore } from '@/stores/productStore';
 import { storeToRefs } from 'pinia';
+import { RouterLink } from 'vue-router';
+import Button from '@/components/button/Button.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -26,7 +28,10 @@ const goBack = () => {
       <div class="detail-info">
         <h2 class="product-title">{{ detailProductData.nama_product }}</h2>
         <p class="price">Rp {{ detailProductData.harga.toLocaleString() }}</p>
-        <p class="description">{{ detailProductData.deskripsi }}</p>
+        <p class="description">Stock: {{ detailProductData.jumlah }}</p>
+        <RouterLink to="/cart" >
+          <Button class="checkout">Checkout</Button>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -84,7 +89,7 @@ const goBack = () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .product-title {
