@@ -1,25 +1,56 @@
 import Order from "../models/Order.js"
+import { Xendit } from 'xendit-node';
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const XENDIT_KEY = process.env.SECRET_API_XENDIT
+const xenditClient = new Xendit({ secretKey: `${XENDIT_KEY}` });
+const { Invoice } = xenditClient
 
 
 export const createOrder = async(req, res)=>{
     try{
         const idUser = req.user._id
-        const { items, payment_method } = req.body
+        const { items, payment_method, email, name} = req.body
 
         const total_price = items.reduce((total, item) => {
             return total + (item.price * item.quantity)
         }, 0)
     
+        const external_id = `order-${Date.now()}-${Math.floor(Math.random() * 10000)}`
+
+        const invoiceResponse = await Invoice.createInvoice({
+            data: {
+              externalId: external_id,
+              amount: total_price,
+              payerEmail: email,
+              description: `Pembayaran untuk ${name}`,
+              currency: 'IDR',
+              invoiceDuration: 86400,
+              reminderTime: 1,
+              items: items.map(item => ({
+                name: item.name || 'Produk',
+                quantity: item.quantity,
+                price: item.price,
+              })),
+            }
+          })
+
         const newOrder = new Order({
             user_id: idUser,
             items,
             total_price,
-            payment_method
+            payment_method,
+            invoice_url: invoiceResponse.invoiceUrl,
+            external_id: external_id
         })
 
 
         await newOrder.save()
-        res.status(201).json({ message: 'Order berhasil dibuat', order: newOrder })
+        res.status(201).json({ message: 'Order dan invoice berhasil dibuat',
+            order: newOrder,
+            invoice_url: invoiceResponse.invoiceUrl })
 
     }catch(error){
         console.error("Error fetching carts:", error);

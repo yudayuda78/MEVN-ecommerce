@@ -14,6 +14,8 @@ const orderSchema = new mongoose.Schema({
         enum: ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded', 'failed'],
         default: 'pending'},
     payment_method: String,
+    invoice_url: String, // <--- tambah ini
+    external_id: String,
     created_at: { type: Date, default: Date.now }
 })
 
