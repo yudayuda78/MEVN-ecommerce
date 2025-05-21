@@ -35,3 +35,14 @@ export const createInvoice = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }
+
+
+export const getInvoice = async(req, res) => {
+    try {
+        const invoices = await Invoice.getInvoices()
+        res.json(invoices)
+    }catch (error) {
+        console.error('Error fetching invoice:', error)
+        res.status(500).json({ error: error.message })
+      }
+}
