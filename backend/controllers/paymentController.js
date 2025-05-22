@@ -46,3 +46,26 @@ export const getInvoice = async(req, res) => {
         res.status(500).json({ error: error.message })
       }
 }
+
+export const invoiceWebhook = async(req, res) => {
+    const xCallbackToken = req.header('X-CALLBACK-TOKEN');
+    console.log(xCallbackToken)
+    const expectedToken = process.env.X_CALLBACK_TOKEN; // Simpan token dari Xendit ke .env
+  
+    // // Validasi token
+    if (xCallbackToken !== expectedToken) {
+      return res.status(403).json({ message: 'Unauthorized callback token' });
+    }
+  
+    const data = req.body;
+    console.log(data)
+  
+    // Log atau proses status PAID
+    // if (data.status === 'PAID') {
+    //   console.log('Invoice paid:', data.external_id);
+    //   // Contoh: update order status ke 'paid' di database
+    //   // await Order.update({ external_id: data.external_id }, { status: 'paid' });
+    // }
+  
+    return res.status(200).json({ message: 'Webhook received successfully' });
+}
