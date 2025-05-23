@@ -11,7 +11,7 @@ const { Invoice } = xenditClient
 
 export const getOrder = async(req, res)=> {
     try{
-        const order = await Order.find().populate('user_id')
+        const order = await Order.find().populate('user_id').populate('items.product_id')
         res.status(200).json({order})
     }catch(error){
         console.log(error)
@@ -21,7 +21,8 @@ export const getOrder = async(req, res)=> {
 export const createOrder = async(req, res)=>{
     try{
         const idUser = req.user._id
-        const { items, payment_method, email, name} = req.body
+        const { items, payment_method, email, name, product_id} = req.body
+        console.log(req.body)
 
         const total_price = items.reduce((total, item) => {
             return total + (item.price * item.quantity)

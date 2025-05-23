@@ -1,26 +1,20 @@
 <script setup>
-import { onMounted, ref, computed, watch } from "vue"
-import Button from "../components/button/Button.vue"
-import { useCartStore } from "@/stores/cartStore"
-import { useAuthStore } from "@/stores/authStore"
-import axios from "axios"
+import { onMounted, ref, computed, watch } from "vue";
+import Button from "../components/button/Button.vue";
+import { useCartStore } from "@/stores/cartStore";
+import { useAuthStore } from "@/stores/authStore";
+import axios from "axios";
 
 const cartStore = useCartStore();
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
-
-const email = computed(() => authStore.user.email || "")
-const nama = computed(() => authStore.user.name)
+const email = computed(() => authStore.user.email || "");
+const nama = computed(() => authStore.user.name);
 
 onMounted(async () => {
-  await cartStore.getProductByUser()
-  await authStore.getUser() 
-
+  await cartStore.getProductByUser();
+  await authStore.getUser();
 });
-
-
-
-
 
 const totalHargaPerItem = (item) => {
   const harga = item.product_id?.harga || 0;
@@ -45,53 +39,54 @@ const decreaseQuantity = async (productID) => {
 
 const totalCost = ref;
 
-const checkout = async() => {
-  if (!cartStore.cartItems.length) return console.log('cart kosong')
-  
-  const itemsForInvoice = cartStore.cartItems[0].items.map(item => ({
+const checkout = async () => {
+  if (!cartStore.cartItems.length) return console.log("cart kosong");
+
+  const itemsForInvoice = cartStore.cartItems[0].items.map((item) => ({
     name: item.product_id?.nama_product,
     price: item.product_id?.harga,
     quantity: item.quantity,
   }));
 
-  const name = authStore.user.name
-  const email = authStore.user.email
-  console.log(name)
+  const itemsForOrder = cartStore.cartItems[0].items.map((item) => ({
+    product_id: item.product_id?._id,
+    quantity: item.quantity,
+    price: item.product_id?.harga,
+  }));
+
+  const name = authStore.user.name;
+  const email = authStore.user.email;
 
   try {
     // 1. Simpan Order ke DB
-    const orderRes = await axios.post('http://localhost:9887/api/order/createOrder', {
-      items: itemsForInvoice.map(item => ({
-        product_id: item.product_id,
-        quantity: item.quantity,
-        price: item.price
-      })),
-      payment_method: "Xendit" // bisa ditambahkan pilihan jika multi pembayaran
-    }, {
-      headers: {
-        Authorization: `Bearer ${authStore.token}`
+    const orderRes = await axios.post("http://localhost:9887/api/order/createOrder",{
+        items: itemsForOrder,
+        payment_method: "Xendit", // bisa ditambahkan pilihan jika multi pembayaran
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
       }
-    });
+    );
 
     // 2. Buat Invoice di Xendit
-    const invoiceRes = await axios.post('http://localhost:9887/api/payment/v2/invoices', {
-      name,
-      email,
-      items: itemsForInvoice
-    });
+    const invoiceRes = await axios.post("http://localhost:9887/api/payment/v2/invoices",{
+        name,
+        email,
+        items: itemsForInvoice,
+      }
+    );
 
     const invoiceUrl = invoiceRes.data.invoice_url;
     window.location.href = invoiceUrl;
-
   } catch (error) {
     console.error("Error saat checkout:", error);
     if (error.response) {
       console.log("Response:", error.response.data);
     }
   }
-  
-}
-
+};
 </script>
 
 <template>
@@ -106,7 +101,11 @@ const checkout = async() => {
 
         <div class="cart-content">
           <div class="cart-image">
-            <img :src="`http://localhost:9887/${item.product_id.image}`" alt="Gambar" class="cart-image"> 
+            <img
+              :src="`http://localhost:9887/${item.product_id.image}`"
+              alt="Gambar"
+              class="cart-image"
+            />
           </div>
           <div class="cart-info">
             <p class="product-name">{{ item.product_id?.nama_product }}</p>
