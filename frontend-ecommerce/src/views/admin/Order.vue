@@ -1,13 +1,22 @@
 <script setup>
  import { useOrderStore } from '@/stores/orderStore';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 
  const orderStore = useOrderStore()
 
  onMounted(async () => {
-    await orderStore.getInvoice()
-    console.log(orderStore.orderData.data)
- })
+  await orderStore.getInvoice();
+
+  // Refresh data setiap 5 detik (5000 ms)
+  intervalId = setInterval(async () => {
+    await orderStore.getInvoice();
+  }, 5000);
+});
+
+// Hentikan polling saat komponen tidak digunakan
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
 
 
 </script>
@@ -25,12 +34,12 @@ import { onMounted } from 'vue';
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(order, index) in orderStore.orderData.data" :key="index">
+      <tr v-for="(order, index) in orderStore.orderData" :key="index">
        
-        <td>{{ order.userId }}</td>
-        <td>{{ order.payerEmail }}</td>
-        <td>{{ order.description }}</td>
-        <td>{{ order.amount }}</td>
+        <td>{{ order.user_id }}</td>
+        <td>{{ order.external_id }}</td>
+        <td>{{ order.invoice_url}}</td>
+        <td>{{ order.total_price }}</td>
         <td>{{ order.status }}</td>
        
       </tr>

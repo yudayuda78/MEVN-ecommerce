@@ -1,4 +1,5 @@
 import { Xendit } from 'xendit-node';
+import Order from "../models/Order.js"
 
 const xenditClient = new Xendit({ secretKey: 'xnd_development_bawL3hfJhbcOOrCXF6MScl1w0Gy0hcFbqPW1CqmFi8qxsm1GnOs26QuAW1uWghQT' });
 const { Invoice } = xenditClient
@@ -29,7 +30,7 @@ export const createInvoice = async (req, res) => {
             items: items,
         }
         });
-        console.log('RESPONSE:', response)
+        // console.log('RESPONSE:', response)
         res.json({ invoice_url: response.invoiceUrl });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -50,9 +51,9 @@ export const getInvoice = async(req, res) => {
 export const invoiceWebhook = async(req, res) => {
     const xCallbackToken = req.header('X-CALLBACK-TOKEN');
     console.log(xCallbackToken)
-    const expectedToken = process.env.X_CALLBACK_TOKEN; // Simpan token dari Xendit ke .env
+    const expectedToken = process.env.X_CALLBACK_TOKEN
   
-    // // Validasi token
+    
     if (xCallbackToken !== expectedToken) {
       return res.status(403).json({ message: 'Unauthorized callback token' });
     }
@@ -60,12 +61,13 @@ export const invoiceWebhook = async(req, res) => {
     const data = req.body;
     console.log(data)
   
-    // Log atau proses status PAID
-    // if (data.status === 'PAID') {
-    //   console.log('Invoice paid:', data.external_id);
-    //   // Contoh: update order status ke 'paid' di database
-    //   // await Order.update({ external_id: data.external_id }, { status: 'paid' });
-    // }
+    
+    if (data.status === 'PAID') {
+        await Order.updateOne(
+            { external_id: data.external_id },
+            { status: 'paid' }
+          );
+    }
   
     return res.status(200).json({ message: 'Webhook received successfully' });
 }

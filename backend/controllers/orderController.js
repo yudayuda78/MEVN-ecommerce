@@ -9,6 +9,15 @@ const xenditClient = new Xendit({ secretKey: `${XENDIT_KEY}` });
 const { Invoice } = xenditClient
 
 
+export const getOrder = async(req, res)=> {
+    try{
+        const order = await Order.find().populate('user_id')
+        res.status(200).json({order})
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export const createOrder = async(req, res)=>{
     try{
         const idUser = req.user._id
