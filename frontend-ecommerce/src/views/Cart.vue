@@ -43,6 +43,7 @@ const checkout = async () => {
   if (!cartStore.cartItems.length) return console.log("cart kosong");
 
   const itemsForInvoice = cartStore.cartItems[0].items.map((item) => ({
+    product_id: item.product_id?._id,
     name: item.product_id?.nama_product,
     price: item.product_id?.harga,
     quantity: item.quantity,

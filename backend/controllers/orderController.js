@@ -22,7 +22,7 @@ export const createOrder = async(req, res)=>{
     try{
         const idUser = req.user._id
         const { items, payment_method, email, name, product_id} = req.body
-        console.log(req.body)
+        // console.log(req.body)
 
         const total_price = items.reduce((total, item) => {
             return total + (item.price * item.quantity)

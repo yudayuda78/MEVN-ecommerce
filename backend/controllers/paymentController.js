@@ -1,5 +1,6 @@
 import { Xendit } from 'xendit-node';
 import Order from "../models/Order.js"
+import Product from "../models/Product.js"
 
 const xenditClient = new Xendit({ secretKey: 'xnd_development_bawL3hfJhbcOOrCXF6MScl1w0Gy0hcFbqPW1CqmFi8qxsm1GnOs26QuAW1uWghQT' });
 const { Invoice } = xenditClient
@@ -10,6 +11,22 @@ export const createInvoice = async (req, res) => {
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'Items must be a non-empty array' });
+    }
+    
+    for (const item of items) {
+        const product = await Product.findById(item.product_id);
+
+        if (!product) {
+          return res.status(404).json({ error: `Produk dengan ID ${item.product_id} tidak ditemukan` });
+        }
+      
+        if (product.jumlah < item.quantity) {
+          return res.status(400).json({ error: `Stok produk '${product.name}' tidak mencukupi` });
+        }
+      
+        product.jumlah -= item.quantity;
+        await product.save();
+       
     }
   
  
@@ -30,7 +47,9 @@ export const createInvoice = async (req, res) => {
             items: items,
         }
         });
-        // console.log('RESPONSE:', response)
+
+        
+       
         res.json({ invoice_url: response.invoiceUrl });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -50,7 +69,7 @@ export const getInvoice = async(req, res) => {
 
 export const invoiceWebhook = async(req, res) => {
     const xCallbackToken = req.header('X-CALLBACK-TOKEN');
-    console.log(xCallbackToken)
+    // console.log(xCallbackToken)
     const expectedToken = process.env.X_CALLBACK_TOKEN
   
     
@@ -59,7 +78,7 @@ export const invoiceWebhook = async(req, res) => {
     }
   
     const data = req.body;
-    console.log(data)
+    // console.log(data)
   
     
     if (data.status === 'PAID') {
