@@ -104,7 +104,7 @@ export const decreaseProductCart = async (req, res) => {
     }
 }
 
-export const deleteCart = async (req, res) => {
+export const deleteItemCart = async (req, res) => {
     try{
         const {product_id} = req.body
         const idUser = req.user._id
@@ -130,6 +130,24 @@ export const deleteCart = async (req, res) => {
         return res.status(200).json(populatedCart)
 
     } catch (error){
+        console.error("Error fetching carts:", error);
+        res.status(500).json({ message: "Terjadi kesalahan saat mengambil data cart." })
+    }
+}
+
+
+export const deleteCart = async(req, res) => {
+    try{
+        const {cartId} = req.params
+        const cartID = new mongoose.Types.ObjectId(cartId)
+        const cart = await Cart.findByIdAndDelete(cartID)
+
+        if (!cart) {
+            return res.status(404).json({ message: "Data cart tidak ditemukan" })
+        }
+
+        return res.status(200).json({ message: "Cart berhasil dihapus", deletedCart: cart })
+    }catch(error){
         console.error("Error fetching carts:", error);
         res.status(500).json({ message: "Terjadi kesalahan saat mengambil data cart." })
     }

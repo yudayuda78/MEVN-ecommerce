@@ -5,7 +5,7 @@ import axios from "axios"
 export const useCartStore = defineStore('cart', () => {
     const cartItems = ref([])
     
-    console.log(cartItems)
+    
     const getProductByUser = async () => {
         try{
             const token = localStorage.getItem('token')
@@ -67,11 +67,32 @@ export const useCartStore = defineStore('cart', () => {
 
     }
 
+    const deleteItemCart = async (cartItemID) => {
+        try{
+            const token = localStorage.getItem('token')
+            console.log(cartItemID)
+            const response = await axios.post('http://localhost:9887/api/cart/delete',
+                { product_id: cartID },
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  }
+                }
+            )
+            
+            console.log('produk berhasil dihapus')
+            await getProductByUser()
+        }catch(error){
+            
+        }
+    }
+
     return{
         cartItems,
         getProductByUser,
         addToCart,
-        decrease
+        decrease,
+        deleteItemCart
     }
     
 })
