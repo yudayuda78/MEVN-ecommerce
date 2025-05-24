@@ -60,30 +60,30 @@ const checkout = async () => {
 
   try {
    
-    // const orderRes = await axios.post("http://localhost:9887/api/order/createOrder",{
-    //     items: itemsForOrder,
-    //     payment_method: "Xendit", // bisa ditambahkan pilihan jika multi pembayaran
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${authStore.token}`,
-    //     },
-    //   }
-    // );
+    const orderRes = await axios.post("http://localhost:9887/api/order/createOrder",{
+        items: itemsForOrder,
+        payment_method: "Xendit", // bisa ditambahkan pilihan jika multi pembayaran
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      }
+    );
 
    
-    // const invoiceRes = await axios.post("http://localhost:9887/api/payment/v2/invoices",{
-    //     name,
-    //     email,
-    //     items: itemsForInvoice,
-    //   }
-    // );
+    const invoiceRes = await axios.post("http://localhost:9887/api/payment/v2/invoices",{
+        name,
+        email,
+        items: itemsForInvoice,
+      }
+    );
 
     const deleteCart = await cartStore.deleteCart(cartStore.cartItems[0]._id )
-    console.log(deleteCart)
+   
 
-    // const invoiceUrl = invoiceRes.data.invoice_url;
-    // window.location.href = invoiceUrl;
+    const invoiceUrl = invoiceRes.data.invoice_url;
+    window.location.href = invoiceUrl;
   } catch (error) {
     console.error("Error saat checkout:", error);
     if (error.response) {

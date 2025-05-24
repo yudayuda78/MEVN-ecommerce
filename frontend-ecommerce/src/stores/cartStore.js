@@ -87,12 +87,30 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
+    const deleteCart = async(cartID) => {
+        try{
+            const token = localStorage.getItem('token')
+            const response = await axios.delete(`http://localhost:9887/api/cart/${cartID}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}` 
+                    }
+                }
+            )
+            console.log('produk berhasil dihapus')
+            await getProductByUser()
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     return{
         cartItems,
         getProductByUser,
         addToCart,
         decrease,
-        deleteItemCart
+        deleteItemCart,
+        deleteCart
     }
     
 })
