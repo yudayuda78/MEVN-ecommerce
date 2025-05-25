@@ -18,6 +18,20 @@ export const getOrder = async(req, res)=> {
     }
 }
 
+export const getOrderById = async(req, res) => {
+    try{
+        const userID = req.user._id
+
+        const orderById = await Order.findOne({user_id: userID}).populate('items.product_id').populate('user_id')
+        if (!orderById) {
+            return res.status(404).json({ message: "Order tidak ditemukan." });
+          }
+        res.status(200).json({data : orderById})
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export const createOrder = async(req, res)=>{
     try{
         const idUser = req.user._id

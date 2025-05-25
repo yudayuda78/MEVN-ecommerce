@@ -14,12 +14,14 @@ import Order from '@/views/admin/Order.vue'
 import Appearance from '@/views/admin/Appearance.vue'
 import Setting from '@/views/admin/Setting.vue'
 import Dashboard from '@/views/admin/Dashboard.vue'
+import MyOrder from '@/components/myorder/MyOrder.vue'
 
 import { useAuthStore } from '@/stores/authStore'
 
 const routes = [
     { path: '/', name: 'Home', component: Home },
     { path: '/account', name: 'Account', component: Account, meta: { requiresAuth: true } },
+    { path: '/myorder', name: 'MyOrder', component: MyOrder},
     { path: '/men', name: 'Men', component: Men},
     { path: '/women', name: 'Women', component: Women},
     { path: '/kid', name: 'Kid', component: Kid},

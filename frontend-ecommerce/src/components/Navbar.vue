@@ -173,6 +173,7 @@ const handleLogin = async () => {
       <div v-if="isDropdownOpen" class="dropdown-menu">
         <h1>Hallo {{ authStore.user?.name }}</h1>
         <RouterLink to="/account" class="dropdown-item">Profile</RouterLink>
+        <RouterLink to="/myorder" class="dropdown-item">My Order</RouterLink>
         <button @click="logout" class="dropdown-item logout-btn">Logout</button>
       </div>
     </div>

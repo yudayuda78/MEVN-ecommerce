@@ -137,7 +137,7 @@ input:focus {
   margin-top: 10px;
   width: 100%;
   padding: 14px 0;
-  background-color: #4a90e2;
+  
   color: white;
   font-size: 16px;
   font-weight: 600;
