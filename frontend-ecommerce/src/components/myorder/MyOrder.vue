@@ -37,7 +37,6 @@ const formatDate = (dateString) => {
       <p><strong>Nama:</strong> {{ order.user_id?.name }}</p>
       <p><strong>Alamat:</strong> {{ order.status }}</p>
       <p><strong>Metode Pembayaran:</strong> {{ order.payment_method }}</p>
-      <!-- <p><strong>Total Harga:</strong> Rp {{ order.total_price.toLocaleString() }}</p> -->
       <p><strong>Waktu Pemesanan:</strong> {{ formatDate(order.created_at) }}</p>
       <p>
         <strong>Invoice:</strong>
