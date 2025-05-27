@@ -4,6 +4,7 @@ import { authMiddleware } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 router.get('/getOrder', getOrder )
+router.patch('/order/:id')
 router.get('/getOrderById/', authMiddleware, getOrderById)
 router.post('/createOrder', authMiddleware, createOrder)
 router.post('/paid', authMiddleware, paidOrder)

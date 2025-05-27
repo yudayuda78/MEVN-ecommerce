@@ -13,6 +13,7 @@ const orderSchema = new mongoose.Schema({
     status: { type: String, 
         enum: ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded', 'failed'],
         default: 'pending'},
+    resi: String,
     payment_method: String,
     invoice_url: String,
     external_id: String,
