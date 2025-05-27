@@ -7,18 +7,22 @@ const orderStore = useOrderStore();
 const expandedIndex = ref(null);
 const showModal = ref(false)
 const selectedOrder = ref(null);
-
+const selectedStatus = ref('');
+const selectedResi = ref('');
 
 
 
 
 const modalUpdate = (order) => {
   selectedOrder.value = order
+  selectedStatus.value = order.status
+  selectedResi.value = order.resi 
   showModal.value = !showModal.value
 };
 
-const update = (orderID) => {
-  
+const update = async (orderID) => {
+  await orderStore.updateOrder(orderID, selectedStatus.value, selectedResi.value)
+  showModal.value = false
 }
 
 let intervalId;
@@ -46,21 +50,21 @@ const toggleDetails = (index) => {
         <p><strong>ID Order:</strong> {{ selectedOrder?._id }}</p>
         <div class="input">
           <label for="status">Status:</label>
-          <select name="status" id="status">
-            <option value="">Processing</option>
-            <option value="">Shipped</option>
-            <option value="">Cancelled</option>
-            <option value="">Refund</option>
+          <select name="status" id="status" v-model="selectedStatus">
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="refund">Refund</option>
           </select>
         </div>
 
         <div class="input">
           <label for="resi">Nomor Resi:</label>
-          <input type="text" id="resi"/>
+          <input type="text" id="resi" v-model="selectedResi"/>
         </div>
 
 
-        <Button >Update</Button>
+        <Button @click="update(selectedOrder._id)">Update</Button>
       </div>
     </div>
   </div>
@@ -111,6 +115,7 @@ const toggleDetails = (index) => {
                     <li><strong>Alamat:</strong> {{ order.user_id.address }}</li>
                     <li><strong>Email:</strong> {{ order.user_id.email }}</li>
                     <li><strong>Handphone:</strong> {{ order.user_id.handphone }}</li>
+                    <li><strong>Nomor Resi:</strong> {{ order.resi }}</li>
 
             
                     <li v-for="(item, i) in order.items" :key="i">
@@ -252,8 +257,12 @@ const toggleDetails = (index) => {
   background-color: #fff3cd;
   color: #856404;
 }
-.status.completed {
-  background-color: #d4edda;
+.status.pending {
+  background-color: #fee9a4;
+  color: #856404;
+}
+.status.processing {
+  background-color: #dfffa3;
   color: #155724;
 }
 .status.failed {
