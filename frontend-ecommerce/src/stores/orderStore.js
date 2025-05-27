@@ -32,10 +32,21 @@ export const useOrderStore = defineStore('order', () => {
         }
     }
 
+    const updateOrder = async (orderId) => {
+        try{
+            const response = await axios.patch(`http://localhost:9887/api/order/updateOrder/${orderId}`,
+
+            )
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     return{
         orderData,
         getInvoice,
-        getOrderById
+        getOrderById,
+        updateOrder
     }
 })
 

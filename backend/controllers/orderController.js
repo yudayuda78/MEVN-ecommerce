@@ -160,9 +160,10 @@ export const canceledOrder = async(req, res)=>{
 
 export const updateOrder = async(req, res) => {
     try{
-        const {orderID} = req.params
+        const {id} = req.params
+        console.log(id)
         const {status, resi} = req.body
-        const order = await Order.findOne({_id: orderID})
+        const order = await Order.findOne({_id: id})
 
         if(!order){
             return res.status(500).json({message:"Data order tidak ditemukan"})
@@ -171,7 +172,7 @@ export const updateOrder = async(req, res) => {
         order.status = status
         order.resi = resi
         await order.save()
-        res.status(200).json({message: 'order berhasil diupdate', oder})
+        res.status(200).json({message: 'order berhasil diupdate', order})
     }catch(error){
         console.log(error)
     }
