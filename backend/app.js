@@ -38,12 +38,14 @@ import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import paymentRoutes from './routes/paymentRoutes.js'
+import settingRoutes from './routes/settingRoutes.js'
 
 app.use('/api/product', productRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/order', orderRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/setting', settingRoutes)
 
 
 app.use('/api/payment', paymentRoutes);
