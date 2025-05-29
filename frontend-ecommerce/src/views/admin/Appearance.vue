@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import Button from '@/components/button/Button.vue'
+import axios from 'axios'
+import { useSettingStore } from '@/stores/settingStore'
+
+const useSetting = useSettingStore()
 
 const brand = ref('')
 const themeColor = ref('#000000')
@@ -13,13 +17,27 @@ const imageUpload = (e, type) => {
   if (type === 'logo') logoFiles.value = files
 }
 
-const saveSettings = () => {
+const saveSettings = async () => {
   console.log({
     brand: brand.value,
     themeColor: themeColor.value,
     iconFiles: iconFiles.value,
-    logoFiles: logoFiles.value
+    logoFiles: logoFiles.value,
   })
+
+  try{
+    const response = await axios.patch('http://localhost:9887/api/setting/updatesetting',
+      {
+        brand : brand.value,
+        themeColor : themeColor.value
+      }
+    )
+
+  }catch(error){
+    console.log(error)
+  }
+
+  useSetting.getSetting()
 }
 </script>
 
