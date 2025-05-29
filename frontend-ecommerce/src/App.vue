@@ -5,8 +5,10 @@ import { useSettingStore } from "./stores/settingStore.js";
 
 const useSetting = useSettingStore()
 
-onMounted(() => {
-  useSetting.getTitle();
+onMounted( async () => {
+  await useSetting.getTitle();
+  await useSetting.getData()
+  await useSetting.getIcon(useSetting.dataSetting.icon)
 })
 </script>
 

@@ -4,13 +4,24 @@ import { ref } from "vue"
 
 export const useSettingStore = defineStore('setting', () => {
 
+    const dataSetting = ref("")
     const title = ref("")
+
+    const getData = async () => {
+        try{
+            const response = await axios.get("http://localhost:9887/api/setting/getsetting")
+            dataSetting.value = response.data.data
+            
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     const getTitle =  async () =>{
         try{
-            const response = await axios.get("http://localhost:9887/api/setting/getsetting");
+            const response = await axios.get("http://localhost:9887/api/setting/getsetting")
             const settings = response.data.data;
-
+            
             if (settings.title) {
                 title.value = settings.title;
             document.title = title.value;
@@ -22,9 +33,22 @@ export const useSettingStore = defineStore('setting', () => {
         }
     }
 
+    const getIcon = async(icon) =>{
+        const url = `http://localhost:9887/settings/${icon}`
+        let link = document.querySelector("link[rel~='icon']")
+        if (!link) {
+            link = document.createElement("link")
+        link.rel = "icon"
+        document.head.appendChild(link)}
+        link.href = url
+    }
+
     return {
+        dataSetting,
+        getData,
         title,
-        getTitle
+        getTitle,
+        getIcon
     }
 
 })
