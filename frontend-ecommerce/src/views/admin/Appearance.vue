@@ -17,27 +17,38 @@ const imageUpload = (e, type) => {
   if (type === 'logo') logoFiles.value = files
 }
 
+
+
 const saveSettings = async () => {
-  console.log({
-    brand: brand.value,
-    themeColor: themeColor.value,
-    iconFiles: iconFiles.value,
-    logoFiles: logoFiles.value,
-  })
+  const formData = new FormData()
+  formData.append('brand', brand.value)
+  formData.append('themeColor', themeColor.value)
+
+  if (iconFiles.value && iconFiles.value.length > 0) {
+    formData.append('icon', iconFiles.value[0])
+  }
+
+  if (logoFiles.value && logoFiles.value.length > 0) {
+    formData.append('logo', logoFiles.value[0])
+  }
 
   try{
-    const response = await axios.patch('http://localhost:9887/api/setting/updatesetting',
+    const response = await axios.patch('http://localhost:9887/api/setting/updatesetting', formData,
       {
         brand : brand.value,
         themeColor : themeColor.value
-      }
+      }, 
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+      }}
     )
 
   }catch(error){
     console.log(error)
   }
 
-  useSetting.getSetting()
+  useSetting.getTitle()
 }
 </script>
 

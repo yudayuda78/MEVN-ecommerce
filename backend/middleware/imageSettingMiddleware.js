@@ -11,4 +11,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-export const uploadImages = upload.array("image[]", 10)
+export const uploadImages = upload.fields([
+  { name: 'icon', maxCount: 1 },
+  { name: 'logo', maxCount: 1 }
+])

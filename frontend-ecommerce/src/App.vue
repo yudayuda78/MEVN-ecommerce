@@ -6,7 +6,7 @@ import { useSettingStore } from "./stores/settingStore.js";
 const useSetting = useSettingStore()
 
 onMounted(() => {
-  useSetting.getSetting();
+  useSetting.getTitle();
 })
 </script>
 

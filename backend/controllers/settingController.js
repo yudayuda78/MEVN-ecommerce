@@ -32,6 +32,23 @@ export const updateSetting = async(req, res) => {
             colorSetting.value = themeColor;
             await colorSetting.save();
         }
+
+        const files = req.files
+        if (files.icon) {
+            const iconSetting = await Setting.findOne({ key: 'icon' })
+        if (iconSetting) {
+            iconSetting.value = files.icon[0].filename
+            await iconSetting.save()
+            }
+        }
+
+        if (files.logo) {
+        const logoSetting = await Setting.findOne({ key: 'logo' })
+        if (logoSetting) {
+        logoSetting.value = files.logo[0].filename
+        await logoSetting.save()
+      }
+    }
      
         
         res.status(200).json({data})

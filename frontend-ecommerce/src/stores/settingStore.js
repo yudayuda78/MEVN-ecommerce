@@ -6,7 +6,7 @@ export const useSettingStore = defineStore('setting', () => {
 
     const title = ref("")
 
-    const getSetting =  async () =>{
+    const getTitle =  async () =>{
         try{
             const response = await axios.get("http://localhost:9887/api/setting/getsetting");
             const settings = response.data.data;
@@ -24,7 +24,7 @@ export const useSettingStore = defineStore('setting', () => {
 
     return {
         title,
-        getSetting
+        getTitle
     }
 
 })
